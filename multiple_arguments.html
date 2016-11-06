@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>4.3. Multiple arguments</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="methods_2.html" title="Chapter 4. Methods" /><link rel="prev" href="arguments.html" title="4.2. Arguments" /><link rel="next" href="optional_arguments.html" title="4.4. Optional Arguments" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.3. Multiple arguments</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="arguments.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Methods</th><td width="20%" align="right"> <a accesskey="n" href="optional_arguments.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="multiple_arguments"></a>4.3. Multiple arguments</h2></div></div></div>
+
+<p>Writing a method that takes on multiple arguments is one of the things that weirds out a newcomer to Objective-C. Each argument actually needs to be written out with it’s own method signature. Take a look at a sample method name in the snippet below</p>
+<pre class="screen">-(void) boo: (int) a Coo:(int) b Doo:(int) c;</pre>
+<p>The full name of the method is booCooDoo. The method takes on 3 arguments, each is prepended a small part of the method name.</p>
+<p>This might seem weird at first, but it is actually expressive and verbose. One of the downsides of this kind of mechanism for writing methods is that you can easily write methods with very long names; and Objective-C is notorious for this.</p>
+<p>Here’s the complete snippet for booCooDoo</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+@interface Obj : NSObject
+-(void) boo: (int) a Coo:(int) b Doo:(int) c;
+@end
+
+@implementation Obj
+-(void) boo:(int) a Coo:(int) b Doo:(int) c {
+  NSLog(@"The params are %i, %i and %i", a,b,c);
+}
+@end
+
+int main(int argc, const char *argv[]){
+  @autoreleasepool {
+    [[Obj new] boo: 1 Coo:2 Doo:3];
+  }
+}</pre>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="arguments.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="methods_2.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="optional_arguments.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.2. Arguments </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.4. Optional Arguments</td></tr></table></div></body></html>

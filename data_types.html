@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.2. Data Types</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="just_enough_c.html" title="Chapter 2. Just Enough C" /><link rel="prev" href="just_enough_c.html" title="Chapter 2. Just Enough C" /><link rel="next" href="variable_declarations.html" title="2.3. Variable Declarations" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.2. Data Types</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="just_enough_c.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Just Enough C</th><td width="20%" align="right"> <a accesskey="n" href="variable_declarations.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="data_types"></a>2.2. Data Types</h2></div></div></div>
+
+<p>The data types that Objective-C uses are, as you might expect, the data types of C. The only added types are the id type and object types — the kind you create out of classes. That will be discussed more on sections of their own.
+ 
+Objective-C is statically typed, which is why we need to be explicit about the kind of variable we will use in our program. Static typing allows the compiler to catch errors like when you declare that a variable should be used for counting (whole numbers, int) then somewhere in your program you assigned it a value that is more appropriate for measuring (numbers with decimal portions, float or double). The compiler can catch that error very early because we declared the kind of variables that we will use.</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="native_types"></a>2.2.1. Native Types</h3></div></div></div>
+
+<p>These kinds of variable are pre-defined in the language or the compiler. You can think of them as built-in variable types. You can pretty much use them in any function or statement because they do not require inclusion or availability of any special type definition in advance.  Variables that are not native types are generally called user-defined types. These are the kinds you define on your own like classes, structure, union and function etc.
+ 
+There are a small number of native types, most of them are of the numeric kind but they can used to store characters, truthiness, falseness and memory addresses (pointers).</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="integers"></a>2.2.2. Integers</h3></div></div></div>
+
+<p>Integers are whole numbers. The kind you use for counting. There are several integer types in Objective-C. These are char, int, short, long and long long.</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">char</span></dt><dd>
+1 byte, 128 to 127 or 0 to 255
+</dd><dt><span class="term">unsigned Char</span></dt><dd>
+1 byte, 0 to 255
+</dd><dt><span class="term">signed Char</span></dt><dd>
+1 byte, -128 to 127
+</dd><dt><span class="term">int</span></dt><dd>
+2 or 4 bytes, 32768 to 32,767 or -2,147,483,648 to 2,147,483,647
+</dd><dt><span class="term">unsigned Int</span></dt><dd>
+2 or 4 bytes, 0 to 65,535 or 0 to 4,294,967,295
+</dd><dt><span class="term">short</span></dt><dd>
+2 bytes, -32,768 to 32,767
+</dd><dt><span class="term">unsigned short</span></dt><dd>
+2 bytes, 0 to 65,535
+</dd><dt><span class="term">long</span></dt><dd>
+4 bytes, -2,147,483,648 to 2,147,483,647
+</dd><dt><span class="term">unsigned long</span></dt><dd>
+4 bytes, 0 to 4,4294,967,295
+</dd></dl></div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="floats"></a>2.2.3. Floats</h3></div></div></div>
+
+<p>These are the kinds you use for measuring. Float points are the computers approximation of a real number.  Double or float, but it is possible to say long double</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">float</span></dt><dd>
+4 bytes, 1.2E-38 to 3.4E+38, accurate to 6 decimal places
+</dd><dt><span class="term">double</span></dt><dd>
+8 bytes, 2.3E-308 to 1.7E+308, accurate to 15 decimal places
+</dd><dt><span class="term">long double</span></dt><dd>
+10 bytes, 3.4E-4932 to 1.1E+4932, accurate to 19 decimal places
+</dd></dl></div>
+<p>The code sample below shows a typical usager on how to declare common variable types</p>
+<pre class="screen">#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main() {
+
+  int a = 100;
+  float b = 100.00f;
+  double c = 100e+2;
+  char d = 'g';
+  bool e = true;
+  long long f = 100;
+
+
+  printf("a  = %i size = %lu bytes\n", a, sizeof(a));
+  printf("b  = %f size = %lu bytes\n", b, sizeof(b));
+  printf("c  = %e size = %lu bytes\n", c, sizeof(c));
+  printf("d  = %c size = %lu bytes\n", d, sizeof(d));
+  printf("e  = %i size = %lu bytes\n", e, sizeof(e));
+  printf("f  = %lld size = %lu bytes\n", f, sizeof(f));
+
+
+  return 0;
+}</pre>
+<p>The code below displays the smallest and highest values that the primitive data types can hold</p>
+<pre class="screen">#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int main() {
+
+  printf("Smallest signed char %d\n", SCHAR_MIN);
+  printf("Largest signed char %d\n", SCHAR_MAX);
+  printf("Largest unsigned char %d\n", UCHAR_MAX);
+
+  printf("Smallest signed short %d\n", SHRT_MIN);
+  printf("Largest signed short %d\n", SHRT_MAX);
+  printf("Largest unsigned short %d\n", USHRT_MAX);
+
+  printf("Smallest signed int %d\n", INT_MIN);
+  printf("Largest signed int %d\n", INT_MAX);
+  printf("Largest unsigned int %d\n", INT_MAX);
+
+  return 0;
+}</pre>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="booleans"></a>2.2.4. Booleans</h3></div></div></div>
+
+<p>In C99, the boolean type was added to the language. Although technically it is still represented as an int but the only allowed values are just 0 and 1 (0 for true and 1 for false).</p>
+<pre class="screen">#include &lt;stdio.h&gt;
+
+int main() {
+
+  _Bool a = 0;
+
+  if(a) {
+    puts("A is true");
+  }
+
+  return 0;
+}</pre>
+<p>If you include the stdbool.h header, you can use the bool type and the constants true or false in the code.</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+int main() {
+
+  BOOL a = true;
+  _Bool b = false;
+  bool c = true;
+
+  if(a) {
+    puts("A is true");
+  }
+
+  return 0;
+}</pre>
+<p>If you use the Foundation framework, you can use either _Bool, bool or BOOL.</p>
+</div>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="just_enough_c.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="just_enough_c.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="variable_declarations.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. Just Enough C </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.3. Variable Declarations</td></tr></table></div></body></html>

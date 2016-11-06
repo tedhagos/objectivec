@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.7. Structs</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="just_enough_c.html" title="Chapter 2. Just Enough C" /><link rel="prev" href="pointers.html" title="2.6. Pointers" /><link rel="next" href="classes_and_objects.html" title="Chapter 3. Classes and Objects" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.7. Structs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pointers.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Just Enough C</th><td width="20%" align="right"> <a accesskey="n" href="classes_and_objects.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="structs"></a>2.7. Structs</h2></div></div></div>
+
+<p>Structs is one way for C to create a user defined data type (UDT).  It provides a way for us to aggregate a fixed set of data members into a single data type.  Here’s how it might look like</p>
+<pre class="screen">struct employee {
+  int id;
+  const char *name;
+  const char *role;
+};</pre>
+<p>That looks a lot like the construction of class, if you already have a background in an OO language like Java,
+C# or C++. But remember, this is C. This language was out in 1970, Structs predates classes.</p>
+<p>A struct is defined using the struct keyword followed by the name of the structure. You will supply the name of the structure, after all, it is your user defined type. The aggregated data are enclosed in the struct block and the struct declaration is terminated by a semi-colon. It is considered a statement.</p>
+<p>The struct can contain any valid data type. It can even contain other structs.</p>
+<p>This is how you might use it in code</p>
+<pre class="screen">struct employee {
+  int id;
+  const char *name;
+  const char *position;
+};
+
+int main() {
+
+  struct employee john = {28, "John Doe", "Boss"};
+  printf("%s is the %s and his id is %i", john.name, john.position, john.id);
+
+  return 0;
+}</pre>
+<p>if we were  to access the members of the struct using a pointer, instead of directly accessing it via the struct variable, the code might look like the one below</p>
+<pre class="screen">struct employee {
+  int id;
+  char *name;
+  char *position;
+};
+
+int main() {
+
+  struct employee john = {28, "John Doe", "Boss"};
+  struct employee *ep = &amp;john;
+
+  printf("%s is the %s and his id is %i", ep-&gt;name, ep-&gt;position, ep-&gt;id);
+
+  return 0;
+}</pre>
+<p>This is a very common idiom because you might have a lot of employee objects in your code. You can probably do a construction where you assign each employee object to the pointer in a loop.</p>
+<p>If you will be creating quite a lot of employee objects,  you can also use the typedef keyword to simplify coding a little bit</p>
+<pre class="screen">typedef struct employee {
+  int id;
+  char *name;
+  char *position;
+} employee_t;
+
+int main() {
+
+  employee_t john = {28, "John Doe", "Boss"};
+  employee_t *ep = &amp;john;
+
+  printf("%s is the %s and his id is %i", ep-&gt;name, ep-&gt;position, ep-&gt;id);
+
+  return 0;
+}</pre>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pointers.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="just_enough_c.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="classes_and_objects.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.6. Pointers </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Classes and Objects</td></tr></table></div></body></html>

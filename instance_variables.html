@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>3.3. Instance Variables</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="classes_and_objects.html" title="Chapter 3. Classes and Objects" /><link rel="prev" href="inheritance.html" title="3.2. Inheritance" /><link rel="next" href="methods.html" title="3.4. Methods" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3. Instance Variables</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="inheritance.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Classes and Objects</th><td width="20%" align="right"> <a accesskey="n" href="methods.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="instance_variables"></a>3.3. Instance Variables</h2></div></div></div>
+
+<p>Instance variables or ivars can be declared either on the header or the implementation file. When ivars are defined on the header, they are implicitly <code class="literal">@protected</code>. And when they are defined on implementation file, they are implicitly <code class="literal">@private</code>.</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+// class Vehicle ------------------------------
+@interface Vehicle : NSObject
+-(NSString*) platenumber;
+-(void) setPlatenumber: (NSString*) args;
+@end
+
+@implementation Vehicle {
+  NSString *platenumber;
+}
+-(NSString*) platenumber {
+  return platenumber;
+}
+-(void) setPlatenumber:(NSString*) args {
+  platenumber=args;
+}
+@end
+
+// class Car -----------------------------------
+@interface Car : Vehicle
+@end
+@implementation Car
+// this method will fail compilation because
+// the ivar platenumber is not reachable from
+// Car class
+-(NSString*) platenumber {
+  NSLog(@"Car polymorph");
+  return platenumber;
+}
+@end
+
+// main ----------------------------------------
+
+int main(int argc, const char *argv[]) {
+  @autoreleasepool {
+    Car *v = [Vehicle new];
+    [v setPlatenumber: @"1234"];
+    NSLog(@"Car's plate number is %@", [v platenumber]);
+  }
+  return 0;
+}</pre>
+<p>The code above will fail compilation. The compiler will immediately see that that platenumber ivar defined in the Vehicle class is private in scope (because it is defined in the implementation file without a qualifying access modifier).</p>
+<p>The corrected version of the code sample above will not be given but instead left for reader as an exercise. Refactor the code so that platenumber ivar is inherited by the Car subclass.</p>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="inheritance.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="classes_and_objects.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="methods.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2. Inheritance </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.4. Methods</td></tr></table></div></body></html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 1. Introduction</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="prev" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="next" href="just_enough_c.html" title="Chapter 2. Just Enough C" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Introduction</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="just_enough_c.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="introduction"></a>Chapter 1. Introduction</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="introduction.html#setup_and_installation">1.1. Setup and Installation</a></span></dt></dl></div>
+
+<p>Objective-C is one of the two programming languages we can use to create applications both for OSX and for iOS devices. The other one, the more modern one is Swift.  There are other languages that can be used to create OSX apps like Ruby and Python but Objective-C and Swift remains the dominant languages.</p>
+<p>Objective-C is a small set of additions to the C language. It is quite different from the other CFOL (C Family of Languages) such as C++, C# and Java because unlike those languages, Objective-C was not built to supplant  the C language. It was not built from the ground up while taking inspiration from the C language.</p>
+<p>Objective-C is actually the C language itself but with some minor additions.   Any code written in the C language will compile and run with Objective-C. Lets take a look at a small Objective-C program.</p>
+<pre class="screen">/*
+
+Compile using:
+
+  clang -framework Cocoa Hello3.m
+
+  You cannot simply compile this using -framework Foundation
+  because it uses the Appkit/Appkit.h, this requires the
+  Cocoa framework
+
+*/
+
+#import &lt;Foundation/Foundation.h&gt;
+#import &lt;Appkit/Appkit.h&gt;
+
+int main() {
+
+  NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+  [NSApplication sharedApplication];
+
+  NSRunAlertPanel(@ "One", @ "Two", @ "Three", nil, nil);
+
+  [pool drain];
+}</pre>
+<p>Firstly, the source file has an extension of  .m. Objective-C programs are customarily written on a file with the .m extension rather than .c for C language nor .cpp for C++. The sample code above isn’t the simplest Objective-C program that can be written, I used to highlight the differences (and similarities) between Objective-C and the C language.</p>
+<p>At first glance, some things you can probably make out and understand but some others look foreign to you. You may recognize the int main() function and perhapsthe #import directive but the square brackets maybe a bit jarring. We will get into to the details of an Objective-C program soon enough but for now, I would like to point out that where you see the square brackets is where Objective-C departs from the C language. The parts that use square brackets give them away as Objective-C codes.</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="setup_and_installation"></a>1.1. Setup and Installation</h2></div></div></div>
+
+<p>We will need XCode to build Cocoa programs. We will also need to download some additional tools like the command line tools once we’ve installed XCode.</p>
+<p>You can get XCode in a couple of ways. The more straightforward and simpler method of installing it is to download it from the App Store. Starting from OSX Lion, you can acquire software from the App Store.</p>
+<p>Launch the App Store from your desktop, launching a Finder window can do this, and then click "Applications" on the left navigation pane and you can double click on the App Store. Alternatively, you can launch Spotlight (cmd spacebar) and type "App Store". Click "Categories" then choose "Developer". XCode should be pretty visible from there.</p>
+<p>Alternatively, you can just type "XCode" on the search bar of the App Store window</p>
+<p><span class="inlinemediaobject"><img src="/images/appstore.png" alt="AppStore" /></span></p>
+<p>Another way to install XCode is to go to <a class="ulink" href="https://developer.apple.com" target="_top">developer.apple.com</a>. You can register for free, you will need to create an Apple ID for the registration and use that to login. You do not need to pay the 100 USD in order to register. Once registered, you can download XCode.</p>
+<p>It is a good idea to become a member of developer.apple.com even if you will not enroll in the developer program. It is a good source for technical documentation and information</p>
+</div>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="just_enough_c.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Mac Programming [ObjectiveC] </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Just Enough C</td></tr></table></div></body></html>

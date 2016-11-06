@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.4. Strings</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="just_enough_c.html" title="Chapter 2. Just Enough C" /><link rel="prev" href="variable_declarations.html" title="2.3. Variable Declarations" /><link rel="next" href="objective_c_strings.html" title="2.5. Objective-C Strings" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.4. Strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="variable_declarations.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Just Enough C</th><td width="20%" align="right"> <a accesskey="n" href="objective_c_strings.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="strings"></a>2.4. Strings</h2></div></div></div>
+
+<p>The Foundation framework in Objective-C has a very robust and sophisticated way for handling strings. However, you might encounter some legacy codes in the course of your programming that are not using the NSString, but instead are using C Style strings. It’s a good idea to have some basic grounding with C Style strings</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int args, const char *argv[]) {
+
+  char string [] = "Hello";
+  printf("%s", string);
+
+  return 0;
+}</pre>
+<p>As an aside, notice that I did not <code class="literal">include</code> the stdio.h anymore, instead I #imported the Foundation header file. The foundation framework takes care of a lot of things for us, even the legacy printf is included in there.</p>
+<p>C Style strings is just an array of character.</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int args, const char *argv[]) {
+
+  char string [] = "Hello";
+  printf("%s has a length of %lu", string, strlen(string));
+
+
+  return 0;
+}</pre>
+<p>strlen is a function that is included in string.h, but since I imported the foundation framework, I’ve got that one covered as well. It’s very to see what strlen does, it returns the number of characters in the char array (string).</p>
+<p>If we wanted to concat two strings,  we might try something like this</p>
+<pre class="screen">char s1 [] = "Hello ";
+char s2 [] = "World\n"
+printf(“%s”, s1 + s2 );</pre>
+<p>Unfortunately, the code above will not work. Strings in C are a bit finicky, they are not so simple to work on.  To combine two strings, we need two string functions, the strcpy and strcat.</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+int main(int args, const char *argv[]) {
+
+  char s1 [] = "Hello ";
+  char s2 [] = "World\n";
+  char s3 [100];
+
+  strcpy(s3, s1);
+  strcat(s3, s2);
+
+  printf("%s has a length of %lu", s3, strlen(s3));
+
+
+  return 0;
+}</pre>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="variable_declarations.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="just_enough_c.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="objective_c_strings.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.3. Variable Declarations </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.5. Objective-C Strings</td></tr></table></div></body></html>

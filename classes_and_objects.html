@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 3. Classes and Objects</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="prev" href="structs.html" title="2.7. Structs" /><link rel="next" href="inheritance.html" title="3.2. Inheritance" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Classes and Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="structs.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="inheritance.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="classes_and_objects"></a>Chapter 3. Classes and Objects</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="classes_and_objects.html#parts_of_a_class">3.1. Parts of a class</a></span></dt><dd><dl><dt><span class="section"><a href="classes_and_objects.html#co_locating_header_and_implementation_files">3.1.1. Co-locating header and implementation files</a></span></dt></dl></dd><dt><span class="section"><a href="inheritance.html">3.2. Inheritance</a></span></dt><dt><span class="section"><a href="instance_variables.html">3.3. Instance Variables</a></span></dt><dt><span class="section"><a href="methods.html">3.4. Methods</a></span></dt></dl></div>
+
+<p>Objective C adds language level support to the C language in order for us to do object oriented programming. While the syntax is straightforward, it may take a bit of getting used to if you are coming from other OO languages like Java or C#.</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="parts_of_a_class"></a>3.1. Parts of a class</h2></div></div></div>
+
+<p>There is actually no class keyword in Objective C, oddly enough. Classes are constructed using two files, an interface file and an implementation file. The interface file contains method signatures, property declarations and instance variables or ivars. The implementation file contains the actual implementation of the method signatures declared in the corresponding interface file.</p>
+<p>A header file for a class declaration typically contains a single definition for an interface and looks like so.</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+@interface Person : NSObject {
+  NSString *lastname;
+  NSString *firstname;
+}
+-(void) talk;
+@end</pre>
+<p>The header section of a class is defined by a pair of @interface and @end declarations. The name of the class is programmer defined and is written immediately after the @interface keyword.</p>
+<p>The colon after the class name means that this class is a subclass, we are inheriting from something. In this particular case, we are inheriting or extending the NSObject class. Objective C follows a single rooted class inheritance mechanism and inheriting from something is mandatory. Unlike in other OO languages, the compiler will not assume that you want to inherit from a default superclass if you omit the declaration of a base class in the interface file. You need an explicit declaration of a base class when defining a new class in Objective C.</p>
+<p>In our example, we inherited from NSObject, you can inherit from something else but NSObject is one of the two root classes in Objective C. The other one is NSProxy, which you will rarely use if ever. Almost all classes in the Foundation framework either directly or indirectly extend NSObject. Most of the classes you will define will probably extend NSObject too.</p>
+<p>There are two intance variables or ivars defined in the header section. There are no explicit declaration of an access descriptor which means, the compiler will treat these ivars as @protected. We will discuss access modifiers for ivars in the next section.</p>
+<p>The last part of the header file is a declaration of an abstract method. An abstract method is member function without a method body. It does not have definition. It is not a concrete method, hence, abstract. An abstract method is basically like a statement, it is terminated by a semi colon.</p>
+<p>A header file is customarily written and saved in a file with a .h extension and the file name is typically and idiomatically the same name as the classname. In the case of our example code, the interface file will be saved in a file named Person.h.</p>
+<p>Every header declaration for a class needs to be paired by a corresponding implementation bearing exactly the same name in the header definition. Our corresponding implementation could be written as follows.</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+#import "Person.h"
+
+@implementation Person
+
+-(void) talk {
+  NSLog(@"Hello World");
+}
+@end</pre>
+<p>The import statement on the second line looks a bit different from the import on the first line. The Foundation headers are surrounded by angle brackets because these header files are built-in to language. For those kinds of headers, you use the angle brackets. In our case here, we need to import a header file that created on our own. For those kinds of files, you surround them with double quotes. We have to import the header definition for Person because the compiler will need that information.</p>
+<p>After the import statements, the keyword @implementation together with the name of class is used denoting that this block contains the concrete definitions for the methods defined in the header file.</p>
+<p>The method talk is not terminated with a semicolon but rather it is appended by a block. The block constitutes the body of the method. It makes it concrete.</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="co_locating_header_and_implementation_files"></a>3.1.1. Co-locating header and implementation files</h3></div></div></div>
+
+<p>The separation of header and implementation files, while idiomatic and good practice, is not required. You are free to write both the header definition and the implementation in a single file. If you do so, the extension of the file is customarily a .m file, and implementation source file. Here’s an example of that</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+// class Person ------------------------------------
+@interface Person : NSObject {
+  NSString *lastname;
+  NSString *firstname;
+}
+-(void) talk;
+@end
+
+@implementation Person
+-(void) talk {
+  NSLog(@"Hello World");
+}
+@end
+
+// main --------------------------------------------
+int main(int argc, const char *argv []){
+  Person *p = [Person new];
+  [p talk]
+}</pre>
+</div>
+</div>
+
+
+
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="structs.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="inheritance.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7. Structs </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.2. Inheritance</td></tr></table></div></body></html>

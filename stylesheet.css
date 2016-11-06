@@ -1,0 +1,78 @@
+
+body {
+  font-size: 1.05em;
+  background: #fbfbfb;
+}
+
+.toc {
+  margin-bottom: 1.5em
+}
+.toc a { font-weight: normal; }
+
+dt {font-weight: bold;}
+dd {margin-bottom:.5em; margin-top:.5em}
+
+dl {
+  margin-before:.2em;
+  margin-after:.2em;
+  -webkit-margin-before:.2em;
+  -webkit-margin-after:.2em;
+}
+li>p, td>p {
+  margin-before:.2em;
+  margin-after:.2em;
+  -webkit-margin-before:.2em;
+  -webkit-margin-after:.2em;
+}
+
+code.literal {
+  font-weight:bold
+}
+
+pre {
+  padding: 5px;
+  overflow: visible;
+  width: auto;
+  white-space: pre-wrap;   
+  white-space: -moz-pre-wrap;
+  white-space: -webkit-pre-wrap;
+}
+
+pre.programlisting {
+  /*background: #f2f2f2;*/
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Georgia', 'Times Roman', serif;
+  font-weight: normal;
+}
+
+.titlepage {
+  /*font-family: 'Helvetica Neueue', 'Helvetica', 'Arial', sans-serif; */
+  font-family: 'Georgia', 'Times Roman', serif;
+  font-weight: normal !important;
+  line-height: 2em;
+  font-size: 1.2em;
+}
+
+.navheader, .navfooter {
+  font-family: 'Helvetica Neueue', 'Helvetica', 'Arial', sans-serif;
+  background: #e7e7e7;
+  padding:5px;
+}
+.navheader>hr, .navfooter>hr, .titlepage>hr {
+  border:0 solid #fff;
+}
+
+.tip, .warning, .important, .information, .caution, .note {
+  padding: 5px;
+  border: 1px dotted #dedede;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  margin-left:0px !important;
+  margin-right:0px !important;
+}
+
+.revhistory {
+  font-size: .8em;
+}

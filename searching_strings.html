@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>6.4. Searching Strings</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="nsstring.html" title="Chapter 6. NSString" /><link rel="prev" href="comparing.html" title="6.3. Comparing" /><link rel="next" href="adding_strings.html" title="6.5. Adding Strings" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.4. Searching Strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="comparing.html">Prev</a> </td><th width="60%" align="center">Chapter 6. NSString</th><td width="20%" align="right"> <a accesskey="n" href="adding_strings.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="searching_strings"></a>6.4. Searching Strings</h2></div></div></div>
+
+<p>When you need to find out if a specific string is within another string, you can use the rangeOfString method</p>
+<pre class="screen">NSString *origstring = @"The quick brown fox jumped";
+
+NSString *search = "brown fox";
+NSRange range = [origstring rangeOfString:search];
+if (range.location == NSNotFound) {
+  // search is not within originstring
+}
+else {
+  // found it
+}</pre>
+<p>NSRange is not an object, it is a struct that is why we did not have to use the pointer operator for its variable. The rangeOfString method of the NSString returns an NSRange structure. NSNotFound is one the constants defined in the Foundation toolkit.</p>
+<p>If you need to perform an case insensitive search for strings, use the following code</p>
+<pre class="screen">NSRange range = [origstring rangeOfString : search
+                 options:NSCaseInsensitiveSearch]</pre>
+<p>The NSCaseInsensitiveSearch is just one of the options you can pass on rangeOfString method.</p>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="comparing.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="nsstring.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="adding_strings.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.3. Comparing </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6.5. Adding Strings</td></tr></table></div></body></html>

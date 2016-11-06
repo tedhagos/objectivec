@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>6.5. Adding Strings</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="nsstring.html" title="Chapter 6. NSString" /><link rel="prev" href="searching_strings.html" title="6.4. Searching Strings" /><link rel="next" href="working_with_alphanumeric_numbers.html" title="6.6. Working with AlphaNumeric numbers" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.5. Adding Strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="searching_strings.html">Prev</a> </td><th width="60%" align="center">Chapter 6. NSString</th><td width="20%" align="right"> <a accesskey="n" href="working_with_alphanumeric_numbers.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="adding_strings"></a>6.5. Adding Strings</h2></div></div></div>
+
+<p>This is tricky and probably frustrating if you are coming from a more modern language like Java or C# because concatenating strings in Objective C is not as simple as string1 + ~string2.</p>
+<pre class="screen">NSString *a = @"Hello ";
+NSString *b = @"World";
+
+NSString *c = a + b;</pre>
+<p>The third line of code above is illegal to do in Objective C. You cannot add strings this way. You could add the strings a and b with</p>
+<pre class="screen">NSString *c = [a stringByAppendingString: b];</pre>
+<p>or using this code</p>
+<pre class="screen">NSString *c = [NSString stringWithFormat: @"%C %C", a,b];</pre>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="nsmutablestring"></a>6.5.1. NSMutableString</h3></div></div></div>
+
+<p>When you need a quick way to add strings, using the stringByAppendingString or the stringWithFormat method may suffice. But these are less than ideal if you need to concatenate a lot of strings. Recall that NSString is an immutable object. Everytime you append a string, you are creating a new object, and that is expensive. It will hurt the performance of the application.</p>
+<p>Another way to concat strings is to use the mutable version of NSString.</p>
+<pre class="screen">NSMutableString *c = [NSMutableString stringWithString: a];
+[c appendString:b];</pre>
+</div>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="searching_strings.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="nsstring.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="working_with_alphanumeric_numbers.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.4. Searching Strings </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6.6. Working with AlphaNumeric numbers</td></tr></table></div></body></html>

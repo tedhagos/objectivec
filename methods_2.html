@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 4. Methods</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="prev" href="methods.html" title="3.4. Methods" /><link rel="next" href="arguments.html" title="4.2. Arguments" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Methods</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="methods.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="arguments.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="methods_2"></a>Chapter 4. Methods</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="methods_2.html#static_and_instance_methods">4.1. Static and Instance Methods</a></span></dt><dt><span class="section"><a href="arguments.html">4.2. Arguments</a></span></dt><dt><span class="section"><a href="multiple_arguments.html">4.3. Multiple arguments</a></span></dt><dt><span class="section"><a href="optional_arguments.html">4.4. Optional Arguments</a></span></dt><dd><dl><dt><span class="section"><a href="optional_arguments.html#method_overloading">4.4.1. Method Overloading</a></span></dt></dl></dd></dl></div>
+
+<p>Methods can be defined either as belonging to the class or scoped to the instance of the class (the object). Unlike Java or C#, where you write a method the way you would write a function, that is not the case in Objective C. Methods are written distinctly different than regular functions.</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="static_and_instance_methods"></a>4.1. Static and Instance Methods</h2></div></div></div>
+
+<p>An instance method, that is a method scoped to the object rather it’s class, is written with a minus sign in the beginning. A method scoped to the class (a static method) is written out with a plus sign instead</p>
+<pre class="screen">@interface Person : NSObject
+  -(void talk);
+@end
+
+@implementation Person
+  -(void) talk {
+    NSLog(@"Person talking");
+  }
+@end
+
+int main() {
+  @autoreleasepool {
+    Person *p = [[Person alloc] init];
+    [p talk];
+  }
+  return 0;
+}</pre>
+<p>The differences and eccentricities of Objective C methods as compared to some other CFOL languages does not end with how the method is written. It also extends to how the method is invoked.</p>
+<p>Objective C has this concept of message sending and message receiving. If you want an object that contains the method to execute that method, you send it a message, and that message is the name of the method. The code example above needs to be dissected a little bit so we can map it to our existing knowledge of classes and objects (for those coming from either C# or Java).</p>
+<p>To create an object, we use the following syntax</p>
+<pre class="screen">Person *p = [[Person alloc] init];</pre>
+<p>The sample snippet above is quite idiomatic, you will see lots of those codes from other people’s examples and book text. It is a nested way of method calling. If we were doing in Java or C#, maybe it would look like this</p>
+<pre class="screen">Person *p = Person.alloc().init();</pre>
+<p>Of course the snippet above is contrived, but that’s how it might look if it were written by either a C# or a Java programmer. Let’s rewrite our little code for creating an object so it becomes a bit more verbose.</p>
+<pre class="screen">Person *p; <a id="CO1-1"></a><span><img src="images/callouts/1.png" alt="1" border="0" /></span>
+p = [Person alloc]; <a id="CO1-2"></a><span><img src="images/callouts/2.png" alt="2" border="0" /></span>
+p = [p init]; <a id="CO1-3"></a><span><img src="images/callouts/3.png" alt="3" border="0" /></span></pre>
+<div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-1"><span><img src="images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left">
+<p>Declares a variable that will hold the reference to a Person object. It is of type Person and it is a pointer because all objects in Objective-C are of pointer types.</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-2"><span><img src="images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left">
+<p>Calls the class method alloc against the Person class. We are simply allocating memory for our would-be object. Notice two things in here</p>
+</td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#CO1-3"><span><img src="images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left">
+<p>I did not have to use the pointer operator anymore. You only use the pointer operator (when working with objects) when declaring them. That is the only time you use the asterisk. You don’t use the asterisk when assigning something to the variable</p>
+</td></tr></table></div>
+<p>When we call a method against a class or object, we use the bracket notation. The receiver of the message and the message itself are enclosed on a pair of square braces
+Third line of the sample code calls the init method of our now allocated object. You can think of the init method as some sort of a constructor equivalent in C# or Java.</p>
+</div>
+
+
+
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="methods.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="arguments.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.4. Methods </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.2. Arguments</td></tr></table></div></body></html>

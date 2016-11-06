@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 6. NSString</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="prev" href="properties_2.html" title="5.3. Properties" /><link rel="next" href="working_with_strings.html" title="6.2. Working with Strings" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. NSString</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="properties_2.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="working_with_strings.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="nsstring"></a>Chapter 6. NSString</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="nsstring.html#creating_strings">6.1. Creating Strings</a></span></dt><dt><span class="section"><a href="working_with_strings.html">6.2. Working with Strings</a></span></dt><dt><span class="section"><a href="comparing.html">6.3. Comparing</a></span></dt><dt><span class="section"><a href="searching_strings.html">6.4. Searching Strings</a></span></dt><dt><span class="section"><a href="adding_strings.html">6.5. Adding Strings</a></span></dt><dd><dl><dt><span class="section"><a href="adding_strings.html#nsmutablestring">6.5.1. NSMutableString</a></span></dt></dl></dd><dt><span class="section"><a href="working_with_alphanumeric_numbers.html">6.6. Working with AlphaNumeric numbers</a></span></dt></dl></div>
+
+<p>You can still use C style strings inf you program if you like, but that will not be very useful especially when you start working with other classes in the Foundation and Cocoa APIs because most of them require objects. C style strings are not objects, they are just an array of characters.</p>
+<p>Strings are very common when writing useful programs, that is why there is a Foundation class for it. The NSString.</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="creating_strings"></a>6.1. Creating Strings</h2></div></div></div>
+
+<p>NSString is an object, so you can pretty much create them like any other object</p>
+<pre class="screen">NSString *string = [[NSString alloc] init];</pre>
+<p>But this is not a terribly useful thing to do because string objectss are immutable. An immutable object is one which when you create them, you can no longer modify its contents. So the code above created an empty string that you can no longer update. You won’t be using that kind of code.</p>
+<p>The most common way to create a string object is to use the string literal</p>
+<pre class="screen">NSString *string = @"Hello World";</pre>
+<p>The string literal pretty much looks like a C style string but with an <code class="literal">@sign</code> before it. The @ character is a compiler directive which tells it that we are dealing with an Objective C type, not a C style string. And because NSString are objects, we can send it messages.</p>
+<pre class="screen">[@"The quick brown fox" length];
+
+NSString *string = @"Hello World";
+NSLog(@"The length of the string is %@", [string length]);</pre>
+<p>There are other ways to create a string object, you can create them by reading them from a file on disk or a network socket. But we won’t look at them right now.</p>
+</div>
+
+
+
+
+
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="properties_2.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="working_with_strings.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">5.3. Properties </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6.2. Working with Strings</td></tr></table></div></body></html>

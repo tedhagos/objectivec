@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>5.3. Properties</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="properties.html" title="Chapter 5. Properties" /><link rel="prev" href="straight_up_getters_and_setters.html" title="5.2. Straight up Getters and Setters" /><link rel="next" href="nsstring.html" title="Chapter 6. NSString" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.3. Properties</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="straight_up_getters_and_setters.html">Prev</a> </td><th width="60%" align="center">Chapter 5. Properties</th><td width="20%" align="right"> <a accesskey="n" href="nsstring.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="properties_2"></a>5.3. Properties</h2></div></div></div>
+
+<p>Objective C has language level support for creating value objects. Instead of manually creating accessor methods, we can declare ivars as properties and even synthesize, that means generate, accessor methods for these ivars.</p>
+<p>Let’s rewrite the Person value object again. We will start by defining lastname and first as properties on the interface file. We don’t have to write anything on the implementation file, but we still have to provide it even if it is empty</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+@interface Person : NSObject
+@property NSString *lastname, *firstname;
+@end
+
+@implementation Person
+@end</pre>
+<p>In older versions of XCode (and the clang compiler that came with it), we actually had to write the <code class="literal">@synthesize</code> statement on the implementation file, like this</p>
+<pre class="screen">@implementation Person
+@synthesize lastname, firstname
+@end</pre>
+<p>But now, if you are using XCode version 4 or higher, we don’t have to write the synthesize statement anymore. The compiler is smart enough to figure out that we would like to generate or synthesize accessor methods for our properties. In order to use our value object, we can write the following code inside the main function</p>
+<pre class="screen">int main(int argc, const char *argv[]){
+  @autoreleasepool {
+    Person *p = [Person new];
+    [p setLastname: @"Doe"];
+    [p setFirstname: @"John"];
+    NSLog(@"The name is %@, %@", [p lastname], [p firstname]);
+  }
+  return 0;
+}</pre>
+<p>The compiler automatically synthesized accessor methods for the properties we declared. Notice the convention it is using when generating the accessors. For the getter accessor, the method name it will synthesize is exactly the same name as the declared property; remember earlier that I said that practice is quite idiomatic in Objective-C, even the synthesizers are following that. As for the setter accessor, the method name will be set + name of property and it will be camel-cased or snake-cased, the first letter of the property name will be the only one capitalized.</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="basic_mechanics_of_property_declarations"></a>5.3.1. Basic Mechanics of Property Declarations</h3></div></div></div>
+
+<p>Properties, unlike <span class="strong"><strong>ivars</strong></span> are declared outside the curly braces</p>
+<pre class="screen">@interface Person : NSObject
+@property NSString *lastname;
+@property NSString *firstname;
+@end</pre>
+<p>The above code snippet is the proper way to define properties. It has the <code class="literal">@property</code> keyword followed by a type then the name of variable.</p>
+<p>The following code will give you an error</p>
+<pre class="screen">@interface Person : NSObject {
+  @property NSString *lastname;
+  @property NSString *firstname;
+}
+@end</pre>
+<p>Properties cannot be declared the way you would declare ivars. If you are using XCode to write your programs, you would see various error flags on the IDE already at this point. So don’t worry, XCode will let you know as soon as you do something illegal.</p>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="attributes"></a>5.3.1.1. Attributes</h4></div></div></div>
+
+<p>Properties may be declared with attributes, you might see some declarations like this</p>
+<pre class="screen">@property (weak) NSString *lastname;</pre>
+<p>The attributes of the properties has got something to do with reference counting and memory management of the Objective-C runtime. The following is a list of some property attributes you may use</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term">atomic</span></dt><dd>
+has something to do with thread safety. All properties are <span class="strong"><strong>implicitly</strong></span> atomic. If you don’t specify an attribute, it will be atomic by default
+</dd><dt><span class="term">non-atomic</span></dt><dd>
+this is not thread-safe. It has its uses. A non-atomic property may have less performance impact during runtime
+</dd><dt><span class="term">strong</span></dt><dd>
+Again, this has something to do with memory management
+</dd><dt><span class="term">weak</span></dt><dd>
+opposite of strong
+</dd><dt><span class="term">retain</span></dt><dd>
+similar to strong
+</dd><dt><span class="term">assign</span></dt><dd>
+The setter method performs a simple assignment of the property without using <code class="literal">copy</code> or <code class="literal">retain</code>. This is the default setting. This is similar to the weak attribute except that if the affected property is released, the value of the property will be set to nil
+</dd><dt><span class="term">readwrite</span></dt><dd>
+It means the compiler will synthesize or generate both getter and setter accessors. This is the default
+</dd><dt><span class="term">readonly</span></dt><dd>
+The compiler will only synthesize a getter accessor method
+</dd><dt><span class="term">getter=methodName</span></dt><dd>
+if you want to specify a method name other than the default method name that will be synthsized by the compiler. The default getter accessor method name will be <code class="literal">set</code> + Nameofproperty. Note that the first character of the property name is capitalized
+</dd><dt><span class="term">setter=methodName</span></dt><dd>
+if you want to specify a method name for the setter accessor other than the default method name that will be synthesized by the compiler. The default setter accessor method name is the same as the name of property
+</dd></dl></div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="property_backed_instance_variables"></a>5.3.1.2. Property backed Instance Variables</h4></div></div></div>
+
+<p>When you declare a property, the compiler actually defines instance variables for you. In the background. This will be invisible to you by default, but you can mess around with it if you really like. Let’s go back to the Person class example and have another look.</p>
+<pre class="screen">@interface Person : NSObject
+@property NSString *lastname;
+@property NSString *firstname;
+@end</pre>
+<p>In this example, we are creating two properties namely <span class="strong"><strong>lastname</strong></span> and <span class="strong"><strong>firstname</strong></span>. The compiler will synthesize accessor methods that will allow us to get and set these properties. It will also create  two ivars for us, namely <code class="literal">_firstname</code> and <code class="literal">_lastname</code>. These two variables are called property backed instance variables. It is as if, we have written our code like the following.</p>
+<pre class="screen">@interface Person : NSObject {
+  NSString *_lastname;
+  NSString *_firstname;
+}
+@property NSString *lastname;
+@property NSString *firstname;
+@end</pre>
+<p>This is all neat and cool, but how do we know those variables were actually created. Well, we can mess with it during initialization. Let’s modify the implementation code for the Person class.</p>
+<pre class="screen">@implementation Person
+
+-(id) init {
+  self = [super init];
+  if(self != nil) {
+    _lastname = @"Nobody";
+    _firstname = @"I am ";
+  }
+  return self;
+}
+@end</pre>
+<p>We have overridden the default init for the Person class and in it, we initialized the property backed instance variables. This means, when we create a Person object, we don’t have to call the setter methods because the lastname and firstname properties would have been initialized to some default values already. Let’s test that using the following code</p>
+<pre class="screen">int main(int argc, const char *argv[]){
+  @autoreleasepool {
+    Person *p = [Person new];
+
+    NSLog(@"The name is %@, %@", [p lastname], [p firstname]);
+  }
+  return 0;
+}</pre>
+</div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="specifying_custom_accessor_methods"></a>5.3.1.3. Specifying Custom Accessor Methods</h4></div></div></div>
+
+<p>If for some reason, you are not happy with the conventions of Objective-C on it generates accessor methods, you can change names of the accessor methods that it will generate. You simply need to specify the name of method on attribute declaration of the property</p>
+<pre class="screen">@interface Person : NSObject
+@property (weak, nonatomic, getter=getLastname)NSString *lastname;
+@property (weak, nonatomic) NSString *firstname;
+@end</pre>
+<p>The properties lastname and firstname on the code sample above were declared as weak and nonatomic. You can have more than attribute specified for a property, you simply need to separate them out by commas. Also notice that the <span class="strong"><strong>getter</strong></span> method name was specified for the lastname property. The syntax to specify accessor methods for properties is as follows</p>
+<pre class="screen">@property (getter=nameofaccessormethod) propertyname
+@property (setter=nameofaccessormethod) propertyname</pre>
+<p>You can can then access the lastname property using the syntax</p>
+<pre class="screen">[p getLastname];</pre>
+<p>instead of the default</p>
+<pre class="screen">[p lastname];</pre>
+</div>
+</div>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="straight_up_getters_and_setters.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="properties.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="nsstring.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">5.2. Straight up Getters and Setters </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. NSString</td></tr></table></div></body></html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 5. Properties</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="prev" href="optional_arguments.html" title="4.4. Optional Arguments" /><link rel="next" href="straight_up_getters_and_setters.html" title="5.2. Straight up Getters and Setters" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. Properties</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="optional_arguments.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="straight_up_getters_and_setters.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="properties"></a>Chapter 5. Properties</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="properties.html#direct_manipulation_of_public_ivars">5.1. Direct manipulation of public ivars</a></span></dt><dt><span class="section"><a href="straight_up_getters_and_setters.html">5.2. Straight up Getters and Setters</a></span></dt><dt><span class="section"><a href="properties_2.html">5.3. Properties</a></span></dt><dd><dl><dt><span class="section"><a href="properties_2.html#basic_mechanics_of_property_declarations">5.3.1. Basic Mechanics of Property Declarations</a></span></dt></dl></dd></dl></div>
+
+<p>One the basic and common tasks in any object oriented language is the creation of value objects. C# programmers call this POCOS and Java programmers refer to these value objects as POJOS, plain ole C# objects and plain ole Java objects respectively.</p>
+<p>There are a couple of ways to construct value objects in Objective-C. Some of these ways are frowned upon and highly discouraged, some have become mainstream practice like the use of @properties and some are pretty much the run-off-the-mill getters and setters. Will take a look at some examples on how to do each of them</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="direct_manipulation_of_public_ivars"></a>5.1. Direct manipulation of public ivars</h2></div></div></div>
+
+<p>I don’t have to tell you that this is the bad practice and quite frowned upon. It violates the principles of encapsulation which in turn violates the principles of cohesion and coupling. The less internal state an object exposes to the world around it, the better. But anyway, here’s how the code will look like</p>
+<pre class="screen">#import &lt;Foundation/Foundation.h&gt;
+
+@interface Person : NSObject{
+  @public NSString *lastname;
+  @public NSString *firstname;
+}
+@end
+
+@implementation Person
+@end
+
+/// main
+int main(int argc, const char *argv []){
+  Person *p = [Person new];
+  p-&gt;firstname = @"Ted";
+  p-&gt;lastname = @"Hagos";
+  NSLog(@" Name is %@ , %@", p-&gt;lastname, p-&gt;firstname);
+}</pre>
+<p>Objective-C being a superset of the C language, you can pretty much access the members of an object using the arrow operator (p is a pointer to the Person object, remember?). Now that you’ve seen how to do it, try your best to forget about this. This example was coded purely for reference purposes only.</p>
+<p>As a side note, the ivars lastname and firstname were defined as @public because by default, when ivars are defined on an interface file, the default access modifier is @protected, which means it is only reachable or accessible from either the class that defined the ivars and its subclasses.</p>
+</div>
+
+
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="optional_arguments.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="straight_up_getters_and_setters.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.4. Optional Arguments </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 5.2. Straight up Getters and Setters</td></tr></table></div></body></html>

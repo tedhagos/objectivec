@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>3.2. Inheritance</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="classes_and_objects.html" title="Chapter 3. Classes and Objects" /><link rel="prev" href="classes_and_objects.html" title="Chapter 3. Classes and Objects" /><link rel="next" href="instance_variables.html" title="3.3. Instance Variables" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.2. Inheritance</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="classes_and_objects.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Classes and Objects</th><td width="20%" align="right"> <a accesskey="n" href="instance_variables.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="inheritance"></a>3.2. Inheritance</h2></div></div></div>
+
+<p>Objective C follows a single rooted class inheritance mechanism. You cannot inherit from more than one superclass. The basic syntax for extending a class is as follows</p>
+<pre class="screen">@interface Person : NSObject {
+  NSString *lastname;
+  NSString *firstname;
+
+  @private NSString *foo;
+}
+
+-(void) talk;
+-(void) walk;
+@end
+
+@interface Employee : Person
+@end</pre>
+<p>To inherit from an existing class, use a colon to signify class extension followed by the name of an existing class, this will in turn become your super or base class.</p>
+<p>The subclass or the child class inherits the following things:</p>
+<p>All variables and methods that are public, which means all methods that are declared on the header file. The implicit and only access modifier for a method on a header file is public
+All variables that are declared @protected in the superclass. When an ivar is defined on the header without any access modifier, it implicitly has protected access. Which means is only reachable from within the class that defined it and its subclasses. Variables with protected access are not reachable outside the class</p>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="classes_and_objects.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="classes_and_objects.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="instance_variables.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. Classes and Objects </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.3. Instance Variables</td></tr></table></div></body></html>

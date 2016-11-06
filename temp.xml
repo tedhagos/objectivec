@@ -1,0 +1,1181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Mac Programming [ObjectiveC]</title>
+<date>Nov 2014</date>
+<author>
+<personname>
+<firstname>Ted</firstname>
+<surname>Hagos</surname>
+</personname>
+<email>ted@thelogbox.com</email>
+</author>
+<authorinitials>TGH</authorinitials>
+<revhistory>
+<revision>
+<revnumber>0.1</revnumber>
+<date>Nov 2014</date>
+<authorinitials>TGH</authorinitials>
+</revision>
+</revhistory>
+</info>
+<chapter xml:id="_introduction">
+<title>Introduction</title>
+<simpara>Objective-C is one of the two programming languages we can use to create applications both for OSX and for iOS devices. The other one, the more modern one is Swift.  There are other languages that can be used to create OSX apps like Ruby and Python but Objective-C and Swift remains the dominant languages.</simpara>
+<simpara>Objective-C is a small set of additions to the C language. It is quite different from the other CFOL (C Family of Languages) such as C++, C# and Java because unlike those languages, Objective-C was not built to supplant  the C language. It was not built from the ground up while taking inspiration from the C language.</simpara>
+<simpara>Objective-C is actually the C language itself but with some minor additions.   Any code written in the C language will compile and run with Objective-C. Lets take a look at a small Objective-C program.</simpara>
+<screen>/*
+
+Compile using:
+
+  clang -framework Cocoa Hello3.m
+
+  You cannot simply compile this using -framework Foundation
+  because it uses the Appkit/Appkit.h, this requires the
+  Cocoa framework
+
+*/
+
+#import &lt;Foundation/Foundation.h&gt;
+#import &lt;Appkit/Appkit.h&gt;
+
+int main() {
+
+  NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+  [NSApplication sharedApplication];
+
+  NSRunAlertPanel(@ "One", @ "Two", @ "Three", nil, nil);
+
+  [pool drain];
+}</screen>
+<simpara>Firstly, the source file has an extension of  .m. Objective-C programs are customarily written on a file with the .m extension rather than .c for C language nor .cpp for C++. The sample code above isn’t the simplest Objective-C program that can be written, I used to highlight the differences (and similarities) between Objective-C and the C language.</simpara>
+<simpara>At first glance, some things you can probably make out and understand but some others look foreign to you. You may recognize the int main() function and perhapsthe #import directive but the square brackets maybe a bit jarring. We will get into to the details of an Objective-C program soon enough but for now, I would like to point out that where you see the square brackets is where Objective-C departs from the C language. The parts that use square brackets give them away as Objective-C codes.</simpara>
+<section xml:id="_setup_and_installation">
+<title>Setup and Installation</title>
+<simpara>We will need XCode to build Cocoa programs. We will also need to download some additional tools like the command line tools once we&#8217;ve installed XCode.</simpara>
+<simpara>You can get XCode in a couple of ways. The more straightforward and simpler method of installing it is to download it from the App Store. Starting from OSX Lion, you can acquire software from the App Store.</simpara>
+<simpara>Launch the App Store from your desktop, launching a Finder window can do this, and then click "Applications" on the left navigation pane and you can double click on the App Store. Alternatively, you can launch Spotlight (cmd spacebar) and type "App Store". Click "Categories" then choose "Developer". XCode should be pretty visible from there.</simpara>
+<simpara>Alternatively, you can just type "XCode" on the search bar of the App Store window</simpara>
+<simpara><inlinemediaobject>
+<imageobject>
+<imagedata fileref="/images/appstore.png"/>
+</imageobject>
+<textobject><phrase>AppStore</phrase></textobject>
+</inlinemediaobject></simpara>
+<simpara>Another way to install XCode is to go to <link xl:href="https://developer.apple.com">developer.apple.com</link>. You can register for free, you will need to create an Apple ID for the registration and use that to login. You do not need to pay the 100 USD in order to register. Once registered, you can download XCode.</simpara>
+<simpara>It is a good idea to become a member of developer.apple.com even if you will not enroll in the developer program. It is a good source for technical documentation and information</simpara>
+</section>
+</chapter>
+<chapter xml:id="_just_enough_c">
+<title>Just Enough C</title>
+<simpara>Objective C is still C. It just has a thin layer of code that adds object orientation plus a bunch of really powerful code libraries like Foundation and Cocoa.</simpara>
+<simpara>This section is not intended to be a proper introduction to the C language. But we will cover enough grounds so we can be ready for Objective C.</simpara>
+<section xml:id="_compilation_and_program_structure">
+<title>Compilation and Program Structure</title>
+<simpara>C is a compiled language. You write your program as text; to run the program, things proceed in two stages. First your text is compiled into machine instructions; then those machine instructions are executed. Thus, as with any compiled language, you can make two kinds of mistake</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Any purely syntactic errors (meaning that you spoke the C language incorrectly) will be caught by the compiler, and the program won’t even begin to run.</simpara>
+</listitem>
+<listitem>
+<simpara>If your program gets past the compiler, then it will run, but there is no guarantee that you haven’t made some other sort of mistake, which can be detected only by noticing that the program doesn’t behave as intended.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>The C compiler is fussy, but you should accept its interference with good grace. The compiler is your friend: learn to love it. It may emit what looks like an irrelevant or incomprehensible error message, but when it does, the fact is that you’ve done some‐ thing wrong and the compiler has helpfully caught it for you. Also, the compiler can warn you if something seems like a possible mistake, even though it isn’t strictly illegal; these warnings, which differ from outright errors, are also helpful and should not be ignored.</simpara>
+<simpara>I have said that running a program requires a preceding stage: compilation. But in fact there is another stage that precedes compilation: preprocessing. Preprocessing modifies your text, so when your text is handed to the compiler, it is not identical to the text you wrote. Preprocessing might sound tricky and intrusive, but in fact it proceeds only according to your instructions and is helpful for making your code clearer and more compact.</simpara>
+<section xml:id="_code_structure">
+<title>Code Structure</title>
+<screen>//
+//  main.m
+//  HelloWorld
+//
+//  Copyright (c) 2015 Teddy Hagos. All rights reserved.
+//
+
+#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+  @autoreleasepool {
+      // insert code here...
+      NSLog(@"Hello, World!");
+  }
+    return 0;
+}</screen>
+<itemizedlist>
+<listitem>
+<simpara>Every statement ends with a semi-colon. The compiler is unforgiving on this one. If you are coming from a language like JavaScript where you may or may not put the semi-colon, you need to be mindful of the C’s compiler behavior about terminating statements.</simpara>
+</listitem>
+<listitem>
+<simpara>Single line comments are written as two forward slashes. Everything to its right until the end of the line is ignored by the compiler</simpara>
+</listitem>
+<listitem>
+<simpara>Multi-line comments are achieved by enclosing the text with a pair of /*   */.</simpara>
+</listitem>
+<listitem>
+<simpara>C, and hence, Objective-C is a case sensitive language</simpara>
+</listitem>
+<listitem>
+<simpara>The main() function is mandatory , even for C. If you try to compile a code without int main() or void main() as the program entry point, the compiler will give you grief</simpara>
+</listitem>
+</itemizedlist>
+<screen>/*
+This code won't compile nor link.
+The entry point main cannot be implicit
+*/
+
+#import &lt;stdio.h&gt;
+
+//int main(){
+
+  int i = 10;
+  printf("Hello %d", i);
+//  return 0;
+//}</screen>
+</section>
+<section xml:id="_compiler_history">
+<title>Compiler History</title>
+<simpara>Originally, XCode’s compiler was the free open source GCC <link xl:href="http://gcc.gnu.org">gcc.gnu.org</link>. Eventually, Apple introduced its own free open source compiler, LLVM <link xl:href="http://llvm.org">llvm.org</link>, also referred to as Clang, thus allowing for improvements that were impossible with GCC. Changing compilers is scary, so Apple proceeded in stages:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>In XCode 3, along with both LLVM and GCC, Apple supplied a hybrid compiler, LLVM-GCC, which provided the advantages of LLVM compilation while parsing code with GCC for maximum backward compatibility, without making it the de‐ fault compiler.</simpara>
+</listitem>
+<listitem>
+<simpara>In XCode 4, LLVM-GCC became the default compiler, but GCC remained available.</simpara>
+</listitem>
+<listitem>
+<simpara>In XCode 4.2, LLVM 3.0 became the default compiler, and pure GCC was withdrawn.</simpara>
+</listitem>
+<listitem>
+<simpara>In XCode 4.6, LLVM advanced to version 4.2.</simpara>
+</listitem>
+<listitem>
+<simpara>In XCode 5, LLVM-GCC has been withdrawn; the compiler is now LLVM 5.0, and the transition from GCC to LLVM is complete.</simpara>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+<section xml:id="_data_types">
+<title>Data Types</title>
+<simpara>The data types that Objective-C uses are, as you might expect, the data types of C. The only added types are the id type and object types&#8201;&#8212;&#8201;the kind you create out of classes. That will be discussed more on sections of their own.
+ 
+Objective-C is statically typed, which is why we need to be explicit about the kind of variable we will use in our program. Static typing allows the compiler to catch errors like when you declare that a variable should be used for counting (whole numbers, int) then somewhere in your program you assigned it a value that is more appropriate for measuring (numbers with decimal portions, float or double). The compiler can catch that error very early because we declared the kind of variables that we will use.</simpara>
+<section xml:id="_native_types">
+<title>Native Types</title>
+<simpara>These kinds of variable are pre-defined in the language or the compiler. You can think of them as built-in variable types. You can pretty much use them in any function or statement because they do not require inclusion or availability of any special type definition in advance.  Variables that are not native types are generally called user-defined types. These are the kinds you define on your own like classes, structure, union and function etc.
+ 
+There are a small number of native types, most of them are of the numeric kind but they can used to store characters, truthiness, falseness and memory addresses (pointers).</simpara>
+</section>
+<section xml:id="_integers">
+<title>Integers</title>
+<simpara>Integers are whole numbers. The kind you use for counting. There are several integer types in Objective-C. These are char, int, short, long and long long.</simpara>
+<variablelist>
+<varlistentry>
+<term>char</term>
+<listitem>
+<simpara>1 byte, 128 to 127 or 0 to 255</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>unsigned Char</term>
+<listitem>
+<simpara>1 byte, 0 to 255</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>signed Char</term>
+<listitem>
+<simpara>1 byte, -128 to 127</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>int</term>
+<listitem>
+<simpara>2 or 4 bytes, 32768 to 32,767 or -2,147,483,648 to 2,147,483,647</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>unsigned Int</term>
+<listitem>
+<simpara>2 or 4 bytes, 0 to 65,535 or 0 to 4,294,967,295</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>short</term>
+<listitem>
+<simpara>2 bytes, -32,768 to 32,767</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>unsigned short</term>
+<listitem>
+<simpara>2 bytes, 0 to 65,535</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>long</term>
+<listitem>
+<simpara>4 bytes, -2,147,483,648 to 2,147,483,647</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>unsigned long</term>
+<listitem>
+<simpara>4 bytes, 0 to 4,4294,967,295</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</section>
+<section xml:id="_floats">
+<title>Floats</title>
+<simpara>These are the kinds you use for measuring. Float points are the computers approximation of a real number.  Double or float, but it is possible to say long double</simpara>
+<variablelist>
+<varlistentry>
+<term>float</term>
+<listitem>
+<simpara>4 bytes, 1.2E-38 to 3.4E+38, accurate to 6 decimal places</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>double</term>
+<listitem>
+<simpara>8 bytes, 2.3E-308 to 1.7E+308, accurate to 15 decimal places</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>long double</term>
+<listitem>
+<simpara>10 bytes, 3.4E-4932 to 1.1E+4932, accurate to 19 decimal places</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>The code sample below shows a typical usager on how to declare common variable types</simpara>
+<screen>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main() {
+
+  int a = 100;
+  float b = 100.00f;
+  double c = 100e+2;
+  char d = 'g';
+  bool e = true;
+  long long f = 100;
+
+
+  printf("a  = %i size = %lu bytes\n", a, sizeof(a));
+  printf("b  = %f size = %lu bytes\n", b, sizeof(b));
+  printf("c  = %e size = %lu bytes\n", c, sizeof(c));
+  printf("d  = %c size = %lu bytes\n", d, sizeof(d));
+  printf("e  = %i size = %lu bytes\n", e, sizeof(e));
+  printf("f  = %lld size = %lu bytes\n", f, sizeof(f));
+
+
+  return 0;
+}</screen>
+<simpara>The code below displays the smallest and highest values that the primitive data types can hold</simpara>
+<screen>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int main() {
+
+  printf("Smallest signed char %d\n", SCHAR_MIN);
+  printf("Largest signed char %d\n", SCHAR_MAX);
+  printf("Largest unsigned char %d\n", UCHAR_MAX);
+
+  printf("Smallest signed short %d\n", SHRT_MIN);
+  printf("Largest signed short %d\n", SHRT_MAX);
+  printf("Largest unsigned short %d\n", USHRT_MAX);
+
+  printf("Smallest signed int %d\n", INT_MIN);
+  printf("Largest signed int %d\n", INT_MAX);
+  printf("Largest unsigned int %d\n", INT_MAX);
+
+  return 0;
+}</screen>
+</section>
+<section xml:id="_booleans">
+<title>Booleans</title>
+<simpara>In C99, the boolean type was added to the language. Although technically it is still represented as an int but the only allowed values are just 0 and 1 (0 for true and 1 for false).</simpara>
+<screen>#include &lt;stdio.h&gt;
+
+int main() {
+
+  _Bool a = 0;
+
+  if(a) {
+    puts("A is true");
+  }
+
+  return 0;
+}</screen>
+<simpara>If you include the stdbool.h header, you can use the bool type and the constants true or false in the code.</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+int main() {
+
+  BOOL a = true;
+  _Bool b = false;
+  bool c = true;
+
+  if(a) {
+    puts("A is true");
+  }
+
+  return 0;
+}</screen>
+<simpara>If you use the Foundation framework, you can use either _Bool, bool or BOOL.</simpara>
+</section>
+</section>
+<section xml:id="_variable_declarations">
+<title>Variable Declarations</title>
+<simpara>C is a statically and strongly typed. Which means before you can use data that is referenced by a variable, that variable must have been properly defined and initialized. During the early days of C, the days of K &amp; R, you cannot use variables unless it has been both defined and initialized. Later compilers relaxed this rule, so now, we can actually write codes like this</simpara>
+<screen>#include &lt;stdio.h&gt;
+
+int main() {
+
+  int a;
+  printf("The value of a is %d", a);
+  return 0;
+}</screen>
+<simpara>This will actually compile and run. You need to remember that C, unlike other languages you may have used e.g. Java or C#, does not initialize variable to a default value. In the code example above, the variable a will not be automatically initialized to zero.</simpara>
+<simpara>What the code did was to actually grab an area of memory, called it variable a and then displayed whatever value is already on the location of the variable a. Moral lesson in this code is – always initialize your variables.</simpara>
+<screen>#include &lt;stdio.h&gt;
+
+int main() {
+
+  int a;
+  printf("The value of a is %d\n", a);
+  printf("The size of a is %lu bytes", sizeof(a));
+  return 0;
+}</screen>
+</section>
+<section xml:id="_strings">
+<title>Strings</title>
+<simpara>The Foundation framework in Objective-C has a very robust and sophisticated way for handling strings. However, you might encounter some legacy codes in the course of your programming that are not using the NSString, but instead are using C Style strings. It’s a good idea to have some basic grounding with C Style strings</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+int main(int args, const char *argv[]) {
+
+  char string [] = "Hello";
+  printf("%s", string);
+
+  return 0;
+}</screen>
+<simpara>As an aside, notice that I did not <literal>include</literal> the stdio.h anymore, instead I #imported the Foundation header file. The foundation framework takes care of a lot of things for us, even the legacy printf is included in there.</simpara>
+<simpara>C Style strings is just an array of character.</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+int main(int args, const char *argv[]) {
+
+  char string [] = "Hello";
+  printf("%s has a length of %lu", string, strlen(string));
+
+
+  return 0;
+}</screen>
+<simpara>strlen is a function that is included in string.h, but since I imported the foundation framework, I’ve got that one covered as well. It’s very to see what strlen does, it returns the number of characters in the char array (string).</simpara>
+<simpara>If we wanted to concat two strings,  we might try something like this</simpara>
+<screen>char s1 [] = "Hello ";
+char s2 [] = "World\n"
+printf(“%s”, s1 + s2 );</screen>
+<simpara>Unfortunately, the code above will not work. Strings in C are a bit finicky, they are not so simple to work on.  To combine two strings, we need two string functions, the strcpy and strcat.</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+int main(int args, const char *argv[]) {
+
+  char s1 [] = "Hello ";
+  char s2 [] = "World\n";
+  char s3 [100];
+
+  strcpy(s3, s1);
+  strcat(s3, s2);
+
+  printf("%s has a length of %lu", s3, strlen(s3));
+
+
+  return 0;
+}</screen>
+</section>
+<section xml:id="_objective_c_strings">
+<title>Objective-C Strings</title>
+<simpara>This part of the training is supposed to be concentrating on C, but we will make an exception. C Style strings are quite difficult to work with. The NSString which is a part of the Foundation framework is more advanced and robust.  So that is what we will use. In the course of your Mac programming (or iOS programming), you will rarely have to work with C Style strings</simpara>
+<simpara>NSString is an object, and all objects in Objective-C are pointers, hence, you will work with pointers when dealing with objects. To define an NSString, the syntax is</simpara>
+<screen>NSSTring *mystring;</screen>
+<simpara>To initialize a string object (from now on, when I say string object, I mean an NSString object, not a C Style string). The following codes can be used.</simpara>
+<screen>NSString *mystring = @”Hello World”;</screen>
+<simpara>Notice that there is an at sign before the enclosed quotes? That is a clue to the compiler (compiler directive actually) which tells it that “Hello World” is not a C Style string, it’s an Objective-C construction.  If you remove the at sign by mistake, it will be treated as a C Style string – you will get an error.</simpara>
+</section>
+<section xml:id="_pointers">
+<title>Pointers</title>
+
+</section>
+<section xml:id="_structs">
+<title>Structs</title>
+<simpara>Structs is one way for C to create a user defined data type (UDT).  It provides a way for us to aggregate a fixed set of data members into a single data type.  Here’s how it might look like</simpara>
+<screen>struct employee {
+  int id;
+  const char *name;
+  const char *role;
+};</screen>
+<simpara>That looks a lot like the construction of class, if you already have a background in an OO language like Java,
+C# or C++. But remember, this is C. This language was out in 1970, Structs predates classes.</simpara>
+<simpara>A struct is defined using the struct keyword followed by the name of the structure. You will supply the name of the structure, after all, it is your user defined type. The aggregated data are enclosed in the struct block and the struct declaration is terminated by a semi-colon. It is considered a statement.</simpara>
+<simpara>The struct can contain any valid data type. It can even contain other structs.</simpara>
+<simpara>This is how you might use it in code</simpara>
+<screen>struct employee {
+  int id;
+  const char *name;
+  const char *position;
+};
+
+int main() {
+
+  struct employee john = {28, "John Doe", "Boss"};
+  printf("%s is the %s and his id is %i", john.name, john.position, john.id);
+
+  return 0;
+}</screen>
+<simpara>if we were  to access the members of the struct using a pointer, instead of directly accessing it via the struct variable, the code might look like the one below</simpara>
+<screen>struct employee {
+  int id;
+  char *name;
+  char *position;
+};
+
+int main() {
+
+  struct employee john = {28, "John Doe", "Boss"};
+  struct employee *ep = &amp;john;
+
+  printf("%s is the %s and his id is %i", ep-&gt;name, ep-&gt;position, ep-&gt;id);
+
+  return 0;
+}</screen>
+<simpara>This is a very common idiom because you might have a lot of employee objects in your code. You can probably do a construction where you assign each employee object to the pointer in a loop.</simpara>
+<simpara>If you will be creating quite a lot of employee objects,  you can also use the typedef keyword to simplify coding a little bit</simpara>
+<screen>typedef struct employee {
+  int id;
+  char *name;
+  char *position;
+} employee_t;
+
+int main() {
+
+  employee_t john = {28, "John Doe", "Boss"};
+  employee_t *ep = &amp;john;
+
+  printf("%s is the %s and his id is %i", ep-&gt;name, ep-&gt;position, ep-&gt;id);
+
+  return 0;
+}</screen>
+</section>
+</chapter>
+<chapter xml:id="_classes_and_objects">
+<title>Classes and Objects</title>
+<simpara>Objective C adds language level support to the C language in order for us to do object oriented programming. While the syntax is straightforward, it may take a bit of getting used to if you are coming from other OO languages like Java or C#.</simpara>
+<section xml:id="_parts_of_a_class">
+<title>Parts of a class</title>
+<simpara>There is actually no class keyword in Objective C, oddly enough. Classes are constructed using two files, an interface file and an implementation file. The interface file contains method signatures, property declarations and instance variables or ivars. The implementation file contains the actual implementation of the method signatures declared in the corresponding interface file.</simpara>
+<simpara>A header file for a class declaration typically contains a single definition for an interface and looks like so.</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+@interface Person : NSObject {
+  NSString *lastname;
+  NSString *firstname;
+}
+-(void) talk;
+@end</screen>
+<simpara>The header section of a class is defined by a pair of @interface and @end declarations. The name of the class is programmer defined and is written immediately after the @interface keyword.</simpara>
+<simpara>The colon after the class name means that this class is a subclass, we are inheriting from something. In this particular case, we are inheriting or extending the NSObject class. Objective C follows a single rooted class inheritance mechanism and inheriting from something is mandatory. Unlike in other OO languages, the compiler will not assume that you want to inherit from a default superclass if you omit the declaration of a base class in the interface file. You need an explicit declaration of a base class when defining a new class in Objective C.</simpara>
+<simpara>In our example, we inherited from NSObject, you can inherit from something else but NSObject is one of the two root classes in Objective C. The other one is NSProxy, which you will rarely use if ever. Almost all classes in the Foundation framework either directly or indirectly extend NSObject. Most of the classes you will define will probably extend NSObject too.</simpara>
+<simpara>There are two intance variables or ivars defined in the header section. There are no explicit declaration of an access descriptor which means, the compiler will treat these ivars as @protected. We will discuss access modifiers for ivars in the next section.</simpara>
+<simpara>The last part of the header file is a declaration of an abstract method. An abstract method is member function without a method body. It does not have definition. It is not a concrete method, hence, abstract. An abstract method is basically like a statement, it is terminated by a semi colon.</simpara>
+<simpara>A header file is customarily written and saved in a file with a .h extension and the file name is typically and idiomatically the same name as the classname. In the case of our example code, the interface file will be saved in a file named Person.h.</simpara>
+<simpara>Every header declaration for a class needs to be paired by a corresponding implementation bearing exactly the same name in the header definition. Our corresponding implementation could be written as follows.</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+#import "Person.h"
+
+@implementation Person
+
+-(void) talk {
+  NSLog(@"Hello World");
+}
+@end</screen>
+<simpara>The import statement on the second line looks a bit different from the import on the first line. The Foundation headers are surrounded by angle brackets because these header files are built-in to language. For those kinds of headers, you use the angle brackets. In our case here, we need to import a header file that created on our own. For those kinds of files, you surround them with double quotes. We have to import the header definition for Person because the compiler will need that information.</simpara>
+<simpara>After the import statements, the keyword @implementation together with the name of class is used denoting that this block contains the concrete definitions for the methods defined in the header file.</simpara>
+<simpara>The method talk is not terminated with a semicolon but rather it is appended by a block. The block constitutes the body of the method. It makes it concrete.</simpara>
+<section xml:id="_co_locating_header_and_implementation_files">
+<title>Co-locating header and implementation files</title>
+<simpara>The separation of header and implementation files, while idiomatic and good practice, is not required. You are free to write both the header definition and the implementation in a single file. If you do so, the extension of the file is customarily a .m file, and implementation source file. Here&#8217;s an example of that</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+// class Person ------------------------------------
+@interface Person : NSObject {
+  NSString *lastname;
+  NSString *firstname;
+}
+-(void) talk;
+@end
+
+@implementation Person
+-(void) talk {
+  NSLog(@"Hello World");
+}
+@end
+
+// main --------------------------------------------
+int main(int argc, const char *argv []){
+  Person *p = [Person new];
+  [p talk]
+}</screen>
+</section>
+</section>
+<section xml:id="_inheritance">
+<title>Inheritance</title>
+<simpara>Objective C follows a single rooted class inheritance mechanism. You cannot inherit from more than one superclass. The basic syntax for extending a class is as follows</simpara>
+<screen>@interface Person : NSObject {
+  NSString *lastname;
+  NSString *firstname;
+
+  @private NSString *foo;
+}
+
+-(void) talk;
+-(void) walk;
+@end
+
+@interface Employee : Person
+@end</screen>
+<simpara>To inherit from an existing class, use a colon to signify class extension followed by the name of an existing class, this will in turn become your super or base class.</simpara>
+<simpara>The subclass or the child class inherits the following things:</simpara>
+<simpara>All variables and methods that are public, which means all methods that are declared on the header file. The implicit and only access modifier for a method on a header file is public
+All variables that are declared @protected in the superclass. When an ivar is defined on the header without any access modifier, it implicitly has protected access. Which means is only reachable from within the class that defined it and its subclasses. Variables with protected access are not reachable outside the class</simpara>
+</section>
+<section xml:id="_instance_variables">
+<title>Instance Variables</title>
+<simpara>Instance variables or ivars can be declared either on the header or the implementation file. When ivars are defined on the header, they are implicitly <literal>@protected</literal>. And when they are defined on implementation file, they are implicitly <literal>@private</literal>.</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+// class Vehicle ------------------------------
+@interface Vehicle : NSObject
+-(NSString*) platenumber;
+-(void) setPlatenumber: (NSString*) args;
+@end
+
+@implementation Vehicle {
+  NSString *platenumber;
+}
+-(NSString*) platenumber {
+  return platenumber;
+}
+-(void) setPlatenumber:(NSString*) args {
+  platenumber=args;
+}
+@end
+
+// class Car -----------------------------------
+@interface Car : Vehicle
+@end
+@implementation Car
+// this method will fail compilation because
+// the ivar platenumber is not reachable from
+// Car class
+-(NSString*) platenumber {
+  NSLog(@"Car polymorph");
+  return platenumber;
+}
+@end
+
+// main ----------------------------------------
+
+int main(int argc, const char *argv[]) {
+  @autoreleasepool {
+    Car *v = [Vehicle new];
+    [v setPlatenumber: @"1234"];
+    NSLog(@"Car's plate number is %@", [v platenumber]);
+  }
+  return 0;
+}</screen>
+<simpara>The code above will fail compilation. The compiler will immediately see that that platenumber ivar defined in the Vehicle class is private in scope (because it is defined in the implementation file without a qualifying access modifier).</simpara>
+<simpara>The corrected version of the code sample above will not be given but instead left for reader as an exercise. Refactor the code so that platenumber ivar is inherited by the Car subclass.</simpara>
+</section>
+<section xml:id="_methods">
+<title>Methods</title>
+<simpara>You can find declarations of method in either or both the header and implementation files. Methods are usually declared on the header file, the interface part that is. This declaration only contains the following</simpara>
+<variablelist>
+<varlistentry>
+<term>Method type</term>
+<listitem>
+<simpara>Whether the method belongs to the object or its class. A minus sign means it is an instance method and plus sign means it belongs to to class</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Return type</term>
+<listitem>
+<simpara>This could be either a primitive type or a reference type</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Method name</term>
+<listitem>
+<simpara>You get to define this part, the usual rules in naming variables  apply to method names as well</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Method arguments</term>
+<listitem>
+<simpara>Methods can accept optional arguments. Having methods accept some params is a bit different in Objective C, we will cover them in a separate section</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>When a method is declared on the header, it needs to have a corresponding definition on the implementation file</simpara>
+<screen>@interface Person : NSObject
+-(void) walk;
+@end
+
+@implementation Person
+-(void) walk {
+  NSLog(@"Person walking");
+}
+@end</screen>
+<simpara>The header files is supposed to contain only the declaration of methods. That means the only thing that can follow the method name is a semicolon, that makes it abstract. The method definition on the implementation file replaces the semicolon with a pair curly braces. The block constitutes the definition of the method, which makes the method concrete and not abstract anymore.</simpara>
+<simpara>Declaring methods on the interface file is known as forward declaration and is quite idiomatic of C/C++ practice. Starting with XCode 4 (and the associated clang compilers), forward declarations seemed to have mattered less. So the compiler will let you get away with methods that are written only on the implementation file. It is still encouraged though to follow the practice of providing forward declarations.</simpara>
+</section>
+</chapter>
+<chapter xml:id="_methods_2">
+<title>Methods</title>
+<simpara>Methods can be defined either as belonging to the class or scoped to the instance of the class (the object). Unlike Java or C#, where you write a method the way you would write a function, that is not the case in Objective C. Methods are written distinctly different than regular functions.</simpara>
+<section xml:id="_static_and_instance_methods">
+<title>Static and Instance Methods</title>
+<simpara>An instance method, that is a method scoped to the object rather it&#8217;s class, is written with a minus sign in the beginning. A method scoped to the class (a static method) is written out with a plus sign instead</simpara>
+<screen>@interface Person : NSObject
+  -(void talk);
+@end
+
+@implementation Person
+  -(void) talk {
+    NSLog(@"Person talking");
+  }
+@end
+
+int main() {
+  @autoreleasepool {
+    Person *p = [[Person alloc] init];
+    [p talk];
+  }
+  return 0;
+}</screen>
+<simpara>The differences and eccentricities of Objective C methods as compared to some other CFOL languages does not end with how the method is written. It also extends to how the method is invoked.</simpara>
+<simpara>Objective C has this concept of message sending and message receiving. If you want an object that contains the method to execute that method, you send it a message, and that message is the name of the method. The code example above needs to be dissected a little bit so we can map it to our existing knowledge of classes and objects (for those coming from either C# or Java).</simpara>
+<simpara>To create an object, we use the following syntax</simpara>
+<screen>Person *p = [[Person alloc] init];</screen>
+<simpara>The sample snippet above is quite idiomatic, you will see lots of those codes from other people&#8217;s examples and book text. It is a nested way of method calling. If we were doing in Java or C#, maybe it would look like this</simpara>
+<screen>Person *p = Person.alloc().init();</screen>
+<simpara>Of course the snippet above is contrived, but that&#8217;s how it might look if it were written by either a C# or a Java programmer. Let&#8217;s rewrite our little code for creating an object so it becomes a bit more verbose.</simpara>
+<screen>Person *p; <co xml:id="CO1-1"/>
+p = [Person alloc]; <co xml:id="CO1-2"/>
+p = [p init]; <co xml:id="CO1-3"/></screen>
+<calloutlist>
+<callout arearefs="CO1-1">
+<para>Declares a variable that will hold the reference to a Person object. It is of type Person and it is a pointer because all objects in Objective-C are of pointer types.</para>
+</callout>
+<callout arearefs="CO1-2">
+<para>Calls the class method alloc against the Person class. We are simply allocating memory for our would-be object. Notice two things in here</para>
+</callout>
+<callout arearefs="CO1-3">
+<para>I did not have to use the pointer operator anymore. You only use the pointer operator (when working with objects) when declaring them. That is the only time you use the asterisk. You don&#8217;t use the asterisk when assigning something to the variable</para>
+</callout>
+</calloutlist>
+<simpara>When we call a method against a class or object, we use the bracket notation. The receiver of the message and the message itself are enclosed on a pair of square braces
+Third line of the sample code calls the init method of our now allocated object. You can think of the init method as some sort of a constructor equivalent in C# or Java.</simpara>
+</section>
+<section xml:id="_arguments">
+<title>Arguments</title>
+<simpara>When you want methods to take on some arguments or parameters, here&#8217;s the syntax on how to do it</simpara>
+<screen>-(void) talk: (NSString*) args;</screen>
+<simpara>By now you would have noticed that a pair of parens is not part of a method signature in Objective-C, and simply putting the arguments inside the pair of parens is not the way to write a method that accepts arguments.</simpara>
+<simpara>When a method must take one argument, a colon is appended to right of the method name. The type of the argument is then written next. The argument type is enclosed in parens. Afterwhich, the name of the argument is written last.</simpara>
+<screen>-(void) foo;
+-(void) goo: (int) args;
+-(void) boo: (float) args;
+-(void) coo: (BOOL) args;
+-(void) doo: (NSString*) args;</screen>
+<simpara>Code snippet above shows how to declare methods that take on a single argument. Going back to our Person class example, if we were to accept an argument on the talk method, here&#8217;s how it will be written and called.</simpara>
+<screen>@interface Person : NSObject
+-(void) talk: (NSString*) args;
+@end
+
+@implementation Person
+-(void) talk: (NSString*) args {
+  NSLog(args);
+}
+
++(id) new {
+  NSLog(@"Overriding new method");
+  return [[self alloc] init];
+}
+@end
+
+int main(int argc, const char *argv[]) {
+  Person *p;
+  p = [Person alloc];
+  p = [p init];
+  [p talk: @"Hello there"];
+}</screen>
+</section>
+<section xml:id="_multiple_arguments">
+<title>Multiple arguments</title>
+<simpara>Writing a method that takes on multiple arguments is one of the things that weirds out a newcomer to Objective-C. Each argument actually needs to be written out with it&#8217;s own method signature. Take a look at a sample method name in the snippet below</simpara>
+<screen>-(void) boo: (int) a Coo:(int) b Doo:(int) c;</screen>
+<simpara>The full name of the method is booCooDoo. The method takes on 3 arguments, each is prepended a small part of the method name.</simpara>
+<simpara>This might seem weird at first, but it is actually expressive and verbose. One of the downsides of this kind of mechanism for writing methods is that you can easily write methods with very long names; and Objective-C is notorious for this.</simpara>
+<simpara>Here&#8217;s the complete snippet for booCooDoo</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+@interface Obj : NSObject
+-(void) boo: (int) a Coo:(int) b Doo:(int) c;
+@end
+
+@implementation Obj
+-(void) boo:(int) a Coo:(int) b Doo:(int) c {
+  NSLog(@"The params are %i, %i and %i", a,b,c);
+}
+@end
+
+int main(int argc, const char *argv[]){
+  @autoreleasepool {
+    [[Obj new] boo: 1 Coo:2 Doo:3];
+  }
+}</screen>
+</section>
+<section xml:id="_optional_arguments">
+<title>Optional Arguments</title>
+<simpara>There is no language level support optional or named arguments in Objective-C, so if you are quite used to languages like C# or Python where you can define optional and named arguments, no such joy in Objective-C. Look at the bright side though, you can make your methods very explicitly named.</simpara>
+<section xml:id="_method_overloading">
+<title>Method Overloading</title>
+<simpara>Same argument as optional arguments.</simpara>
+<simpara>Make plenty of examples though</simpara>
+</section>
+</section>
+</chapter>
+<chapter xml:id="_properties">
+<title>Properties</title>
+<simpara>One the basic and common tasks in any object oriented language is the creation of value objects. C# programmers call this POCOS and Java programmers refer to these value objects as POJOS, plain ole C# objects and plain ole Java objects respectively.</simpara>
+<simpara>There are a couple of ways to construct value objects in Objective-C. Some of these ways are frowned upon and highly discouraged, some have become mainstream practice like the use of @properties and some are pretty much the run-off-the-mill getters and setters. Will take a look at some examples on how to do each of them</simpara>
+<section xml:id="_direct_manipulation_of_public_ivars">
+<title>Direct manipulation of public ivars</title>
+<simpara>I don&#8217;t have to tell you that this is the bad practice and quite frowned upon. It violates the principles of encapsulation which in turn violates the principles of cohesion and coupling. The less internal state an object exposes to the world around it, the better. But anyway, here&#8217;s how the code will look like</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+@interface Person : NSObject{
+  @public NSString *lastname;
+  @public NSString *firstname;
+}
+@end
+
+@implementation Person
+@end
+
+/// main
+int main(int argc, const char *argv []){
+  Person *p = [Person new];
+  p-&gt;firstname = @"Ted";
+  p-&gt;lastname = @"Hagos";
+  NSLog(@" Name is %@ , %@", p-&gt;lastname, p-&gt;firstname);
+}</screen>
+<simpara>Objective-C being a superset of the C language, you can pretty much access the members of an object using the arrow operator (p is a pointer to the Person object, remember?). Now that you&#8217;ve seen how to do it, try your best to forget about this. This example was coded purely for reference purposes only.</simpara>
+<simpara>As a side note, the ivars lastname and firstname were defined as @public because by default, when ivars are defined on an interface file, the default access modifier is @protected, which means it is only reachable or accessible from either the class that defined the ivars and its subclasses.</simpara>
+</section>
+<section xml:id="_straight_up_getters_and_setters">
+<title>Straight up Getters and Setters</title>
+<simpara>The most common way of coding value objects is of course, creating methods within the class to manipulate its internal ivars.</simpara>
+<screen>@interface Person : NSObject
+-(void) setLastname:(NSString*) arg;
+-(void) setFirstname: (NSString*) arg;
+-(NSString*) lastname;
+-(NSString*) firstname;
+@end</screen>
+<simpara>On the interface file of the Person class, I only defined a pair of methods that sets and gets the lastname/firstname. Notice that the interface file does not contain any definition of the ivars; if ivars are going to be private anyway, they are better written out on the implementation file, not the interface.</simpara>
+<simpara>Now, the implementation file</simpara>
+<screen>@implementation Person{
+  @private NSString *lastname;
+  @private NSString *firstname;
+}
+-(void) setLastname:(NSString*) arg{lastname = arg;}
+-(void) setFirstname: (NSString*) arg {firstname = arg;}
+-(NSString*) lastname {return lastname;}
+-(NSString*) firstname {return firstname;}
+@end</screen>
+<simpara>No surprises here, they are basically just setting and getting the lastname and firstname private variables of Person object. You may have noticed that the name of the getter method is the same as the name of ivar. This is not required but it is quite idiomatic to do this in Objective-C. Don&#8217;t worry that the runtime will be confused because we used the same name in the ivar and method, it is smart enough to tell the difference.</simpara>
+<simpara>The next code snippet shows the main function which sets and gets the members of the value object.</simpara>
+<screen>int main(int argc, const char *argv []){
+  Person *p = [Person new];
+  [p setFirstname:@"Ted"];
+  [p setLastname: @"Hagos"];
+  NSLog(@" Name is %@ , %@", [p lastname], [p firstname]);
+}</screen>
+<simpara>There is nothing wrong coding value objects this way, except that Objective-C has a more idiomatic way of creating value objects using properties</simpara>
+</section>
+<section xml:id="_properties_2">
+<title>Properties</title>
+<simpara>Objective C has language level support for creating value objects. Instead of manually creating accessor methods, we can declare ivars as properties and even synthesize, that means generate, accessor methods for these ivars.</simpara>
+<simpara>Let&#8217;s rewrite the Person value object again. We will start by defining lastname and first as properties on the interface file. We don&#8217;t have to write anything on the implementation file, but we still have to provide it even if it is empty</simpara>
+<screen>#import &lt;Foundation/Foundation.h&gt;
+
+@interface Person : NSObject
+@property NSString *lastname, *firstname;
+@end
+
+@implementation Person
+@end</screen>
+<simpara>In older versions of XCode (and the clang compiler that came with it), we actually had to write the <literal>@synthesize</literal> statement on the implementation file, like this</simpara>
+<screen>@implementation Person
+@synthesize lastname, firstname
+@end</screen>
+<simpara>But now, if you are using XCode version 4 or higher, we don&#8217;t have to write the synthesize statement anymore. The compiler is smart enough to figure out that we would like to generate or synthesize accessor methods for our properties. In order to use our value object, we can write the following code inside the main function</simpara>
+<screen>int main(int argc, const char *argv[]){
+  @autoreleasepool {
+    Person *p = [Person new];
+    [p setLastname: @"Doe"];
+    [p setFirstname: @"John"];
+    NSLog(@"The name is %@, %@", [p lastname], [p firstname]);
+  }
+  return 0;
+}</screen>
+<simpara>The compiler automatically synthesized accessor methods for the properties we declared. Notice the convention it is using when generating the accessors. For the getter accessor, the method name it will synthesize is exactly the same name as the declared property; remember earlier that I said that practice is quite idiomatic in Objective-C, even the synthesizers are following that. As for the setter accessor, the method name will be set + name of property and it will be camel-cased or snake-cased, the first letter of the property name will be the only one capitalized.</simpara>
+<section xml:id="_basic_mechanics_of_property_declarations">
+<title>Basic Mechanics of Property Declarations</title>
+<simpara>Properties, unlike <emphasis role="strong">ivars</emphasis> are declared outside the curly braces</simpara>
+<screen>@interface Person : NSObject
+@property NSString *lastname;
+@property NSString *firstname;
+@end</screen>
+<simpara>The above code snippet is the proper way to define properties. It has the <literal>@property</literal> keyword followed by a type then the name of variable.</simpara>
+<simpara>The following code will give you an error</simpara>
+<screen>@interface Person : NSObject {
+  @property NSString *lastname;
+  @property NSString *firstname;
+}
+@end</screen>
+<simpara>Properties cannot be declared the way you would declare ivars. If you are using XCode to write your programs, you would see various error flags on the IDE already at this point. So don&#8217;t worry, XCode will let you know as soon as you do something illegal.</simpara>
+<section xml:id="_attributes">
+<title>Attributes</title>
+<simpara>Properties may be declared with attributes, you might see some declarations like this</simpara>
+<screen>@property (weak) NSString *lastname;</screen>
+<simpara>The attributes of the properties has got something to do with reference counting and memory management of the Objective-C runtime. The following is a list of some property attributes you may use</simpara>
+<variablelist>
+<varlistentry>
+<term>atomic</term>
+<listitem>
+<simpara>has something to do with thread safety. All properties are <emphasis role="strong">implicitly</emphasis> atomic. If you don&#8217;t specify an attribute, it will be atomic by default</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>non-atomic</term>
+<listitem>
+<simpara>this is not thread-safe. It has its uses. A non-atomic property may have less performance impact during runtime</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>strong</term>
+<listitem>
+<simpara>Again, this has something to do with memory management</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>weak</term>
+<listitem>
+<simpara>opposite of strong</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>retain</term>
+<listitem>
+<simpara>similar to strong</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>assign</term>
+<listitem>
+<simpara>The setter method performs a simple assignment of the property without using <literal>copy</literal> or <literal>retain</literal>. This is the default setting. This is similar to the weak attribute except that if the affected property is released, the value of the property will be set to nil</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>readwrite</term>
+<listitem>
+<simpara>It means the compiler will synthesize or generate both getter and setter accessors. This is the default</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>readonly</term>
+<listitem>
+<simpara>The compiler will only synthesize a getter accessor method</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>getter=methodName</term>
+<listitem>
+<simpara>if you want to specify a method name other than the default method name that will be synthsized by the compiler. The default getter accessor method name will be <literal>set</literal> + Nameofproperty. Note that the first character of the property name is capitalized</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>setter=methodName</term>
+<listitem>
+<simpara>if you want to specify a method name for the setter accessor other than the default method name that will be synthesized by the compiler. The default setter accessor method name is the same as the name of property</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+</section>
+<section xml:id="_property_backed_instance_variables">
+<title>Property backed Instance Variables</title>
+<simpara>When you declare a property, the compiler actually defines instance variables for you. In the background. This will be invisible to you by default, but you can mess around with it if you really like. Let&#8217;s go back to the Person class example and have another look.</simpara>
+<screen>@interface Person : NSObject
+@property NSString *lastname;
+@property NSString *firstname;
+@end</screen>
+<simpara>In this example, we are creating two properties namely <emphasis role="strong">lastname</emphasis> and <emphasis role="strong">firstname</emphasis>. The compiler will synthesize accessor methods that will allow us to get and set these properties. It will also create  two ivars for us, namely <literal>_firstname</literal> and <literal>_lastname</literal>. These two variables are called property backed instance variables. It is as if, we have written our code like the following.</simpara>
+<screen>@interface Person : NSObject {
+  NSString *_lastname;
+  NSString *_firstname;
+}
+@property NSString *lastname;
+@property NSString *firstname;
+@end</screen>
+<simpara>This is all neat and cool, but how do we know those variables were actually created. Well, we can mess with it during initialization. Let&#8217;s modify the implementation code for the Person class.</simpara>
+<screen>@implementation Person
+
+-(id) init {
+  self = [super init];
+  if(self != nil) {
+    _lastname = @"Nobody";
+    _firstname = @"I am ";
+  }
+  return self;
+}
+@end</screen>
+<simpara>We have overridden the default init for the Person class and in it, we initialized the property backed instance variables. This means, when we create a Person object, we don&#8217;t have to call the setter methods because the lastname and firstname properties would have been initialized to some default values already. Let&#8217;s test that using the following code</simpara>
+<screen>int main(int argc, const char *argv[]){
+  @autoreleasepool {
+    Person *p = [Person new];
+
+    NSLog(@"The name is %@, %@", [p lastname], [p firstname]);
+  }
+  return 0;
+}</screen>
+</section>
+<section xml:id="_specifying_custom_accessor_methods">
+<title>Specifying Custom Accessor Methods</title>
+<simpara>If for some reason, you are not happy with the conventions of Objective-C on it generates accessor methods, you can change names of the accessor methods that it will generate. You simply need to specify the name of method on attribute declaration of the property</simpara>
+<screen>@interface Person : NSObject
+@property (weak, nonatomic, getter=getLastname)NSString *lastname;
+@property (weak, nonatomic) NSString *firstname;
+@end</screen>
+<simpara>The properties lastname and firstname on the code sample above were declared as weak and nonatomic. You can have more than attribute specified for a property, you simply need to separate them out by commas. Also notice that the <emphasis role="strong">getter</emphasis> method name was specified for the lastname property. The syntax to specify accessor methods for properties is as follows</simpara>
+<screen>@property (getter=nameofaccessormethod) propertyname
+@property (setter=nameofaccessormethod) propertyname</screen>
+<simpara>You can can then access the lastname property using the syntax</simpara>
+<screen>[p getLastname];</screen>
+<simpara>instead of the default</simpara>
+<screen>[p lastname];</screen>
+</section>
+</section>
+</section>
+</chapter>
+<chapter xml:id="_nsstring">
+<title>NSString</title>
+<simpara>You can still use C style strings inf you program if you like, but that will not be very useful especially when you start working with other classes in the Foundation and Cocoa APIs because most of them require objects. C style strings are not objects, they are just an array of characters.</simpara>
+<simpara>Strings are very common when writing useful programs, that is why there is a Foundation class for it. The NSString.</simpara>
+<section xml:id="_creating_strings">
+<title>Creating Strings</title>
+<simpara>NSString is an object, so you can pretty much create them like any other object</simpara>
+<screen>NSString *string = [[NSString alloc] init];</screen>
+<simpara>But this is not a terribly useful thing to do because string objectss are immutable. An immutable object is one which when you create them, you can no longer modify its contents. So the code above created an empty string that you can no longer update. You won&#8217;t be using that kind of code.</simpara>
+<simpara>The most common way to create a string object is to use the string literal</simpara>
+<screen>NSString *string = @"Hello World";</screen>
+<simpara>The string literal pretty much looks like a C style string but with an <literal>@sign</literal> before it. The @ character is a compiler directive which tells it that we are dealing with an Objective C type, not a C style string. And because NSString are objects, we can send it messages.</simpara>
+<screen>[@"The quick brown fox" length];
+
+NSString *string = @"Hello World";
+NSLog(@"The length of the string is %@", [string length]);</screen>
+<simpara>There are other ways to create a string object, you can create them by reading them from a file on disk or a network socket. But we won&#8217;t look at them right now.</simpara>
+</section>
+<section xml:id="_working_with_strings">
+<title>Working with Strings</title>
+<simpara>Some of the things we can do with Strings are the following</simpara>
+<screen>NSString *s = @"My String";
+NSLog(s);
+s = [s uppercaseString];
+NSLog(s);
+s = [s lowercaseString];
+NSLog(s);
+s = [s capitalizedString];
+NSLog(s);</screen>
+<simpara>These are pretty straightforward methods, they transform the string into something else. But note that none of methods we called above modified the original string object. The methods uppercase, lowercase and capitalized that we called all resulted in the creation of a new string object. We simply reused the reference variable everytime we transformed the original string.</simpara>
+</section>
+<section xml:id="_comparing">
+<title>Comparing</title>
+<simpara>Comparing strings cannot be performed using the equivalence operators. We cannot compare strings the way we would compare two integers.</simpara>
+<screen>NSString *a = @"Hello";
+NSString *b = @"Hello";
+if (a == b) {
+  // Do Something
+}</screen>
+<simpara>The code above will not work as expected. It will compile, sure, but what you would be comparing are memory addresses of variables a and b, not their string contents. The proper way to compare strings for equivalence is shown in the following code</simpara>
+<screen>if ([a isEqualTo: b]){
+  NSLog(@"Strings match");
+}</screen>
+<simpara>The isEqualTo method of the NSString performs the necessary comparisson between the two strings and returns true if the strings are identical in contents. It returns false otherwise.</simpara>
+</section>
+<section xml:id="_searching_strings">
+<title>Searching Strings</title>
+<simpara>When you need to find out if a specific string is within another string, you can use the rangeOfString method</simpara>
+<screen>NSString *origstring = @"The quick brown fox jumped";
+
+NSString *search = "brown fox";
+NSRange range = [origstring rangeOfString:search];
+if (range.location == NSNotFound) {
+  // search is not within originstring
+}
+else {
+  // found it
+}</screen>
+<simpara>NSRange is not an object, it is a struct that is why we did not have to use the pointer operator for its variable. The rangeOfString method of the NSString returns an NSRange structure. NSNotFound is one the constants defined in the Foundation toolkit.</simpara>
+<simpara>If you need to perform an case insensitive search for strings, use the following code</simpara>
+<screen>NSRange range = [origstring rangeOfString : search
+                 options:NSCaseInsensitiveSearch]</screen>
+<simpara>The NSCaseInsensitiveSearch is just one of the options you can pass on rangeOfString method.</simpara>
+</section>
+<section xml:id="_adding_strings">
+<title>Adding Strings</title>
+<simpara>This is tricky and probably frustrating if you are coming from a more modern language like Java or C# because concatenating strings in Objective C is not as simple as string1 + ~string2.</simpara>
+<screen>NSString *a = @"Hello ";
+NSString *b = @"World";
+
+NSString *c = a + b;</screen>
+<simpara>The third line of code above is illegal to do in Objective C. You cannot add strings this way. You could add the strings a and b with</simpara>
+<screen>NSString *c = [a stringByAppendingString: b];</screen>
+<simpara>or using this code</simpara>
+<screen>NSString *c = [NSString stringWithFormat: @"%C %C", a,b];</screen>
+<section xml:id="_nsmutablestring">
+<title>NSMutableString</title>
+<simpara>When you need a quick way to add strings, using the stringByAppendingString or the stringWithFormat method may suffice. But these are less than ideal if you need to concatenate a lot of strings. Recall that NSString is an immutable object. Everytime you append a string, you are creating a new object, and that is expensive. It will hurt the performance of the application.</simpara>
+<simpara>Another way to concat strings is to use the mutable version of NSString.</simpara>
+<screen>NSMutableString *c = [NSMutableString stringWithString: a];
+[c appendString:b];</screen>
+</section>
+</section>
+<section xml:id="_working_with_alphanumeric_numbers">
+<title>Working with AlphaNumeric numbers</title>
+<simpara>There maybe times when you need to extract numeric values from strings, e.g. if you read the string from a configuration file and you need to work with the values inside the file.</simpara>
+<screen>NSString *a = @"1";
+NSString *b = @"2.0";
+
+int i = [a intValue];
+float f = [b floatValue];</screen>
+</section>
+</chapter>
+<chapter xml:id="_the_mac_command_line">
+<title>The Mac Command Line</title>
+<section xml:id="_package_manager">
+<title>Package Manager</title>
+<simpara>If you have ever used NuGet or Chocolatey (Windows tools) or apt-get (Linux tools) to install software for your platform, you can do the same on a Mac using HomeBrew or <emphasis role="strong">brew</emphasis> for short.</simpara>
+<simpara>Head over to the [homebrew website](<link xl:href="http://brew.sh">http://brew.sh</link>) to install the tool. You are not going to download any dmg binaries. The installation instruction on the brew website will actually ask you to open a terminal window, copy and paste a script command and execute it. Here are the steps</simpara>
+<simpara>Launch a terminal window. Click cmd + spacebar then type "Terminal". The first hit on Spotlight should be the Terminal.app, press enter to launch it</simpara>
+<simpara>Head over to [brew.sh](<link xl:href="http://brew.sh">http://brew.sh</link>), copy and paste the script under the the heading "install homebrew". I will copy and paste the script here for purposes of convenience, but you should really to the brew website because those instructions will be updated, this document might not get updated for sometime. Anyway, the script you need to copy paste is the following</simpara>
+<screen>ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</screen>
+<simpara>OSX comes with Ruby, so the script above should not give you a problem. Press ENTER to start the installation. Wait for instructions.</simpara>
+<simpara>Once the installation is done, you can now get lots of good stuff from the homebrew repos, some of them are the following</simpara>
+<screen>brew install git
+brew install tmux</screen>
+<simpara>Brew is not the only package manager for OSX, there are others like Fink or MacPorts.</simpara>
+</section>
+<section xml:id="_iterm2">
+<title>iTerm2</title>
+<simpara>Get iTerm2. The built-in Terminal.app is okay, but if you want some bells and whistles for your Terminal console, iTerm2 is the way to go.</simpara>
+<simpara>Head over to the [iTerm2 website](<link xl:href="https://www.iterm2.com/">https://www.iterm2.com/</link>) and download the binary installer.  Install it the way you have installed other binaries on the Mac. Double click and follow the prompts.</simpara>
+<simpara>It will ask you to drag the iTerm2 app into the <emphasis role="strong">Applications</emphasis> folder. Follow it.</simpara>
+</section>
+</chapter>
+<chapter xml:id="_tmux">
+<title>TMUX</title>
+<simpara>TMUX is a terminal multiplexer just like <emphasis role="strong">screen</emphasis>. Actually, you can still use screen in OSX but tmux is more modern and it has a very active community of devs updating it from time to time. Get it via brew</simpara>
+<screen>brew install tmux</screen>
+<simpara>You might not like the default key bindings and colors of tmux, in that case, you can change it by creating a tmux configuration file. To create the tmux config file, follow the commands</simpara>
+<screen>cd ~
+touch .tmux.conf</screen>
+<simpara>Next, edit the contents of .tmux.conf using your favorite editor. If, for example, you have installed the SublimeText editor and have already mapped it to your command line, you can do this</simpara>
+<screen>subl ~/.tmux.conf</screen>
+<simpara>Now you can edit the config file. For starters, you can follow my tmux config until you can customize your own.</simpara>
+<screen>set -g prefix C-v
+unbind C-b
+
+set -g base-index 1
+setw -g pane-base-index 1
+
+bind | split-window -h
+bind - split-window -v
+bind D source-file ~/progtools/tdev.sh
+
+setw -g mode-mouse on
+set  -g mouse-select-pane on
+set  -g mouse-resize-pane on
+set  -g mouse-select-window on
+
+set  -g pane-border-fg colour236
+set  -g pane-active-border-fg  cyan
+set  -g pane-active-border-bg default
+# set  -g pane-active-border-bg green
+set  -g default-terminal "screen-256color"
+set  -g status-bg colour233
+set  -g status-fg cyan
+
+set  -g default-command "reattach-to-user-namespace -l /bin/bash"</screen>
+<simpara>Once you have saved the .tmux.conf on your home directory, you can now start using tmux.</simpara>
+</chapter>
+<chapter xml:id="_using_tmux">
+<title>Using TMUX</title>
+<simpara>Launch iTerm2. To create a new tmux session, use the <literal>new</literal> command</simpara>
+<screen>tmux new -s work</screen>
+<simpara>You can replace <emphasis role="strong">work</emphasis> in the command above with any name you want, I just used it because I want my session to be named "work". You can create as many sessions as you want, but just start with one session for now.</simpara>
+<simpara>It may seem that nothing happened after you created a new session, but try pressing they keys <literal>CTRL+V</literal>, release they keys then press the minus sign. Your screen should be split vertically by now. Next, try pressing the keys <literal>CTRL+V</literal>, release the keys then press the <literal>|</literal>. That key is usually found on top of the ENTER key on US keyboards. Your screen should be split vertically by now.</simpara>
+<simpara>You can jump from one panel to another using your mouse. Just click over a panel and the cursor focus should be on that panel.</simpara>
+<simpara>Alternatively, you can also jump from panel to panel using the <literal>CTRL+V</literal>, then the arrow keys.</simpara>
+<simpara>Once you are done with tmux, you can kill the session with the command</simpara>
+<screen>tmux kill-session -t work</screen>
+<simpara>Of course, replace <emphasis role="strong">work</emphasis> with whatever session name you used.</simpara>
+<simpara>Those are the basics for tmux.</simpara>
+</chapter>
+<chapter xml:id="_protocols">
+<title>Protocols</title>
+<simpara>Objective-C is single rooted class inheritance. But that does not mean you cannot do multiple inheritance. You can make different objects respond to a method or a set of methods even if these objects are not related by inheritance.</simpara>
+<simpara>Lets&#8217;s consider a simple use case. See the two groups of classes in the diagram below.</simpara>
+<simpara><inlinemediaobject>
+<imageobject>
+<imagedata fileref="images/protocol.png"/>
+</imageobject>
+<textobject><phrase>protocol</phrase></textobject>
+</inlinemediaobject></simpara>
+<simpara>The way the classes are organized at the moment, it is quite difficult to imagine that they can descend from a common class, although that is definitely doable.</simpara>
+<simpara>We would have an interesting problem if we wanted some of these classes to respond to some methods like <literal>turnRight</literal>, <literal>turnLeft</literal>, <literal>stop</literal> and <literal>go</literal>. You might recognize those methods as activities you can do, and quite expected to do, on the street. Collectively, let&#8217;s call this group of methods <emphasis role="strong">StreetLegal</emphasis>.</simpara>
+<simpara>We now need to decide whether we should re-arrange our class hierarchy so that some classes like Person, Bicycle and Motorbike would descend from the StreetLegal class so that they can respond to messages turnRight and turnLeft etc. But to do that would be too rigid and will seem a bit too contrived. Imagine that a person and bicycle descending from a common base class, that does not seem too natural. In situations like this, we can use <emphasis role="strong">Protocols</emphasis></simpara>
+<simpara><inlinemediaobject>
+<imageobject>
+<imagedata fileref="images/protocol-2.png"/>
+</imageobject>
+<textobject><phrase>protocol 2</phrase></textobject>
+</inlinemediaobject></simpara>
+<simpara>A protocol is a group of methods that may be implemented by classes that are not related by an inheritance hierarchy. In our example, we can make the Person, Bicycle and Motorbike classes implement the StreetLegal protocol even if they are not related by inheritance.</simpara>
+<simpara>When a class implements a protocol, they are entering into some sort of a contract that they will respond to the messages promised by the protocol. That is just a roundabout way of saying that a class should <emphasis role="strong">implement</emphasis> all the methods written on the protocol. If you have worked with either Java or C# before, protocols are the equivalent of <emphasis role="strong">interfaces</emphasis> in those languages.</simpara>
+<section xml:id="_protocol_declaration">
+<title>Protocol Declaration</title>
+<simpara>A protocol block is declared using the <emphasis role="strong">@protocol</emphasis> keyword. Unlike a class, a protocol contains only the signature of the methods. It does not have a corresponding implementation. The implementation of the protocol methods is left to the class that will implement a protocol.</simpara>
+<screen>@protocol StreetLegal
+-(void) turnLeft;
+-(void) turnRight;
+-(void) fullStop;
+@end</screen>
+</section>
+</chapter>
+</book>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>4.2. Arguments</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="methods_2.html" title="Chapter 4. Methods" /><link rel="prev" href="methods_2.html" title="Chapter 4. Methods" /><link rel="next" href="multiple_arguments.html" title="4.3. Multiple arguments" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.2. Arguments</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="methods_2.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Methods</th><td width="20%" align="right"> <a accesskey="n" href="multiple_arguments.html">Next</a></td></tr></table><hr /></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="arguments"></a>4.2. Arguments</h2></div></div></div>
+
+<p>When you want methods to take on some arguments or parameters, here’s the syntax on how to do it</p>
+<pre class="screen">-(void) talk: (NSString*) args;</pre>
+<p>By now you would have noticed that a pair of parens is not part of a method signature in Objective-C, and simply putting the arguments inside the pair of parens is not the way to write a method that accepts arguments.</p>
+<p>When a method must take one argument, a colon is appended to right of the method name. The type of the argument is then written next. The argument type is enclosed in parens. Afterwhich, the name of the argument is written last.</p>
+<pre class="screen">-(void) foo;
+-(void) goo: (int) args;
+-(void) boo: (float) args;
+-(void) coo: (BOOL) args;
+-(void) doo: (NSString*) args;</pre>
+<p>Code snippet above shows how to declare methods that take on a single argument. Going back to our Person class example, if we were to accept an argument on the talk method, here’s how it will be written and called.</p>
+<pre class="screen">@interface Person : NSObject
+-(void) talk: (NSString*) args;
+@end
+
+@implementation Person
+-(void) talk: (NSString*) args {
+  NSLog(args);
+}
+
++(id) new {
+  NSLog(@"Overriding new method");
+  return [[self alloc] init];
+}
+@end
+
+int main(int argc, const char *argv[]) {
+  Person *p;
+  p = [Person alloc];
+  p = [p init];
+  [p talk: @"Hello there"];
+}</pre>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="methods_2.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="methods_2.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="multiple_arguments.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Methods </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.3. Multiple arguments</td></tr></table></div></body></html>

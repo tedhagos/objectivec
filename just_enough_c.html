@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 2. Just Enough C</title><link rel="stylesheet" type="text/css" href="stylesheet.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="up" href="index.html" title="Mac Programming [ObjectiveC]" /><link rel="prev" href="introduction.html" title="Chapter 1. Introduction" /><link rel="next" href="data_types.html" title="2.2. Data Types" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Just Enough C</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="introduction.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="data_types.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="just_enough_c"></a>Chapter 2. Just Enough C</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="just_enough_c.html#compilation_and_program_structure">2.1. Compilation and Program Structure</a></span></dt><dd><dl><dt><span class="section"><a href="just_enough_c.html#code_structure">2.1.1. Code Structure</a></span></dt><dt><span class="section"><a href="just_enough_c.html#compiler_history">2.1.2. Compiler History</a></span></dt></dl></dd><dt><span class="section"><a href="data_types.html">2.2. Data Types</a></span></dt><dd><dl><dt><span class="section"><a href="data_types.html#native_types">2.2.1. Native Types</a></span></dt><dt><span class="section"><a href="data_types.html#integers">2.2.2. Integers</a></span></dt><dt><span class="section"><a href="data_types.html#floats">2.2.3. Floats</a></span></dt><dt><span class="section"><a href="data_types.html#booleans">2.2.4. Booleans</a></span></dt></dl></dd><dt><span class="section"><a href="variable_declarations.html">2.3. Variable Declarations</a></span></dt><dt><span class="section"><a href="strings.html">2.4. Strings</a></span></dt><dt><span class="section"><a href="objective_c_strings.html">2.5. Objective-C Strings</a></span></dt><dt><span class="section"><a href="pointers.html">2.6. Pointers</a></span></dt><dt><span class="section"><a href="structs.html">2.7. Structs</a></span></dt></dl></div>
+
+<p>Objective C is still C. It just has a thin layer of code that adds object orientation plus a bunch of really powerful code libraries like Foundation and Cocoa.</p>
+<p>This section is not intended to be a proper introduction to the C language. But we will cover enough grounds so we can be ready for Objective C.</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="compilation_and_program_structure"></a>2.1. Compilation and Program Structure</h2></div></div></div>
+
+<p>C is a compiled language. You write your program as text; to run the program, things proceed in two stages. First your text is compiled into machine instructions; then those machine instructions are executed. Thus, as with any compiled language, you can make two kinds of mistake</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+Any purely syntactic errors (meaning that you spoke the C language incorrectly) will be caught by the compiler, and the program won’t even begin to run.
+</li><li class="listitem">
+If your program gets past the compiler, then it will run, but there is no guarantee that you haven’t made some other sort of mistake, which can be detected only by noticing that the program doesn’t behave as intended.
+</li></ul></div>
+<p>The C compiler is fussy, but you should accept its interference with good grace. The compiler is your friend: learn to love it. It may emit what looks like an irrelevant or incomprehensible error message, but when it does, the fact is that you’ve done some‐ thing wrong and the compiler has helpfully caught it for you. Also, the compiler can warn you if something seems like a possible mistake, even though it isn’t strictly illegal; these warnings, which differ from outright errors, are also helpful and should not be ignored.</p>
+<p>I have said that running a program requires a preceding stage: compilation. But in fact there is another stage that precedes compilation: preprocessing. Preprocessing modifies your text, so when your text is handed to the compiler, it is not identical to the text you wrote. Preprocessing might sound tricky and intrusive, but in fact it proceeds only according to your instructions and is helpful for making your code clearer and more compact.</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="code_structure"></a>2.1.1. Code Structure</h3></div></div></div>
+
+<pre class="screen">//
+//  main.m
+//  HelloWorld
+//
+//  Copyright (c) 2015 Teddy Hagos. All rights reserved.
+//
+
+#import &lt;Foundation/Foundation.h&gt;
+
+int main(int argc, const char * argv[]) {
+  @autoreleasepool {
+      // insert code here...
+      NSLog(@"Hello, World!");
+  }
+    return 0;
+}</pre>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+Every statement ends with a semi-colon. The compiler is unforgiving on this one. If you are coming from a language like JavaScript where you may or may not put the semi-colon, you need to be mindful of the C’s compiler behavior about terminating statements.
+</li><li class="listitem">
+Single line comments are written as two forward slashes. Everything to its right until the end of the line is ignored by the compiler
+</li><li class="listitem">
+Multi-line comments are achieved by enclosing the text with a pair of /*   */.
+</li><li class="listitem">
+C, and hence, Objective-C is a case sensitive language
+</li><li class="listitem">
+The main() function is mandatory , even for C. If you try to compile a code without int main() or void main() as the program entry point, the compiler will give you grief
+</li></ul></div>
+<pre class="screen">/*
+This code won't compile nor link.
+The entry point main cannot be implicit
+*/
+
+#import &lt;stdio.h&gt;
+
+//int main(){
+
+  int i = 10;
+  printf("Hello %d", i);
+//  return 0;
+//}</pre>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="compiler_history"></a>2.1.2. Compiler History</h3></div></div></div>
+
+<p>Originally, XCode’s compiler was the free open source GCC <a class="ulink" href="http://gcc.gnu.org" target="_top">gcc.gnu.org</a>. Eventually, Apple introduced its own free open source compiler, LLVM <a class="ulink" href="http://llvm.org" target="_top">llvm.org</a>, also referred to as Clang, thus allowing for improvements that were impossible with GCC. Changing compilers is scary, so Apple proceeded in stages:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+In XCode 3, along with both LLVM and GCC, Apple supplied a hybrid compiler, LLVM-GCC, which provided the advantages of LLVM compilation while parsing code with GCC for maximum backward compatibility, without making it the de‐ fault compiler.
+</li><li class="listitem">
+In XCode 4, LLVM-GCC became the default compiler, but GCC remained available.
+</li><li class="listitem">
+In XCode 4.2, LLVM 3.0 became the default compiler, and pure GCC was withdrawn.
+</li><li class="listitem">
+In XCode 4.6, LLVM advanced to version 4.2.
+</li><li class="listitem">
+In XCode 5, LLVM-GCC has been withdrawn; the compiler is now LLVM 5.0, and the transition from GCC to LLVM is complete.
+</li></ul></div>
+</div>
+</div>
+
+
+
+
+
+
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="introduction.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="data_types.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.2. Data Types</td></tr></table></div></body></html>

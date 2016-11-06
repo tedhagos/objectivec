@@ -1,0 +1,34 @@
+:stylesheet: style.css
+:doctype: book
+:Author Initials: TGH
+:Copyright: (c) Ted Hagos 2014
+
+////
+Important Javascript concepts
+Hello Node
+Basic routing
+File I/O
+Middleware
+Connecting to Relational Databases
+Introduction to MongoDB and NOSQL
+Basic CRUD using Mongoose
+ExpressJS
+Route Params
+Templating
+Logging
+AngularJS
+Authentication and Sessions
+////
+
+= Mac Programming [ObjectiveC]
+Ted Hagos <ted@thelogbox.com>
+v0.1, Nov 2014
+
+include::chapters/setup.md[]
+include::chapters/just-enough-c.md[]
+include::chapters/classes-objects.md[]
+include::chapters/methods.md[]
+include::chapters/properties.md[]
+include::chapters/strings.md[]
+include::chapters/mac-commandline.md[]
+include::chapters/protocols.md[]
